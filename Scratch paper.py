@@ -25,99 +25,6 @@ def buildLocation(cardType):
             pBuildingCost=50
         )
 
-
-class Go:
-    type = ""
-    name = ""
-    payment = 0
-
-    def __init__(self, propType, cardName, cardPayment):
-        self.type = propType
-        self.name = cardName
-        self.payment = cardPayment
-
-    def getName(self):
-        return self.name
-
-    def getPayment(self):
-        return self.payment
-
-    def getInfo(self):
-        return [self.type, self.name, self.payment]
-
-
-class Buildable:
-    type = ''
-    name = ''
-    cost = ''
-    rent = 0
-    colorRent = 0
-    rent1 = 0
-    rent2 = 0
-    rent3 = 0
-    rent4 = 0
-    rentHotel = 0
-    buildingCost = 0
-    mortgageValue = 0
-    unmortgageCost = 0
-    isMortgaged = False
-    owner = ''
-    level = 0
-
-    def __init__(self, pType, pName, pCost, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
-        self.type = pType
-        self.name = pName
-        self.cost = pCost
-        self.rent = pRent
-        self.colorRent = self.rent * 2
-        self.rent1 = pRent1
-        self.rent2 = self.rent1 * 3
-        self.rent3 = self.rent1 * 9
-        self.rent4 = pRent4
-        self.rentHotel = pRentHotel
-        self.buildingCost = pBuildingCost
-        self.mortgageValue = self.cost / 2
-        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
-
-    def setOwner(self, player):
-        self.owner = player
-
-    def setLevel(self, level):
-        self.level = level
-
-    def setIsMortgaged(self, mortgaged):
-        self.isMortgaged = mortgaged
-
-    def getOwner(self):
-        return self.owner
-
-    def getName(self):
-        return self.name
-
-    def getLevel(self):
-        return self.level
-
-    def getRentArray(self):
-        return [self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4, self.rentHotel]
-
-    def getBuildingCost(self):
-        return self.buildingCost
-
-    def getMortgageValue(self):
-        return self.mortgageValue
-
-    def getUnmortgageCost(self):
-        return self.unmortgageCost
-
-    def getIsMortgaged(self):
-        return self.isMortgaged
-
-    def getInfo(self):
-        return [self.type, self.name, self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4,
-                self.rentHotel, self.buildingCost, self.mortgageValue, self.unmortgageCost, self.isMortgaged,
-                self.owner, self.level]
-
-
 # Setting Variables
 # Name of all locations on the board
 name = {
@@ -256,3 +163,114 @@ while turn < 200:
     print('Location: ', name[location])
     print('')
 
+
+class Go:
+    type = ""
+    name = ""
+    payment = 0
+
+    def __init__(self, propType, cardName, cardPayment):
+        self.type = propType
+        self.name = cardName
+        self.payment = cardPayment
+
+    def getName(self):
+        return self.name
+
+    def getPayment(self):
+        return self.payment
+
+    def getInfo(self):
+        return [self.type, self.name, self.payment]
+
+
+class Buildable:
+    type = ''
+    name = ''
+    cost = ''
+    rent = 0
+    colorRent = 0
+    rent1 = 0
+    rent2 = 0
+    rent3 = 0
+    rent4 = 0
+    rentHotel = 0
+    buildingCost = 0
+    mortgageValue = 0
+    unmortgageCost = 0
+    isMortgaged = False
+    owner = ''
+    level = 0
+
+    def __init__(self, pType, pName, pCost, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
+        self.type = pType
+        self.name = pName
+        self.cost = pCost
+        self.rent = pRent
+        self.colorRent = self.rent * 2
+        self.rent1 = pRent1
+        self.rent2 = self.rent1 * 3
+        self.rent3 = self.rent1 * 9
+        self.rent4 = pRent4
+        self.rentHotel = pRentHotel
+        self.buildingCost = pBuildingCost
+        self.mortgageValue = self.cost / 2
+        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
+
+    def setOwner(self, player):
+        self.owner = player
+
+    def setLevel(self, level):
+        self.level = level
+
+    def setIsMortgaged(self, mortgaged):
+        self.isMortgaged = mortgaged
+
+    def getOwner(self):
+        return self.owner
+
+    def getName(self):
+        return self.name
+
+    def getLevel(self):
+        return self.level
+
+    def getRentArray(self):
+        return [self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4, self.rentHotel]
+
+    def getBuildingCost(self):
+        return self.buildingCost
+
+    def getMortgageValue(self):
+        return self.mortgageValue
+
+    def getUnmortgageCost(self):
+        return self.unmortgageCost
+
+    def getIsMortgaged(self):
+        return self.isMortgaged
+
+    def getInfo(self):
+        return [self.type, self.name, self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4,
+                self.rentHotel, self.buildingCost, self.mortgageValue, self.unmortgageCost, self.isMortgaged,
+                self.owner, self.level]
+
+
+class Tax:
+    type = ''
+    name = ''
+    tax = 0
+
+    def __init__(self, pType, pName, pTax):
+        self.type = pType
+        self.name = pName
+        self.tax = pTax
+
+    def getName(self):
+        return self.name
+
+    def getTax(self):
+        return self.tax
+
+    def getInfo(self):
+        return [self.type, self.name, self.tax]
