@@ -369,7 +369,7 @@ class Railroad:
                 self.unmortgageCost, self.isMortgaged, self.owner, self.level]
 
 
-class NoAction:
+class SimpleLocation:
     type = ''
     name = ''
 
@@ -451,3 +451,4 @@ class Utility:
     def getInfo(self):
         return [self.type, self.name, self.cost, self.rent1, self.rent2, self.mortgageValue, self.unmortgageCost,
                 self.isMortgaged, self.owner, self.level]
+
