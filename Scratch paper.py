@@ -188,7 +188,7 @@ class Buildable:
     type = ''
     name = ''
     cost = ''
-    rent = 0
+    rent0 = 0
     colorRent = 0
     rent1 = 0
     rent2 = 0
@@ -206,8 +206,8 @@ class Buildable:
         self.type = pType
         self.name = pName
         self.cost = pCost
-        self.rent = pRent
-        self.colorRent = self.rent * 2
+        self.rent0 = pRent
+        self.colorRent = self.rent0 * 2
         self.rent1 = pRent1
         self.rent2 = self.rent1 * 3
         self.rent3 = self.rent1 * 9
@@ -235,8 +235,8 @@ class Buildable:
     def getLevel(self):
         return self.level
 
-    def getRentArray(self):
-        return [self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4, self.rentHotel]
+    def getRents(self):
+        return [self.rent0, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4, self.rentHotel]
 
     def getBuildingCost(self):
         return self.buildingCost
@@ -251,7 +251,7 @@ class Buildable:
         return self.isMortgaged
 
     def getInfo(self):
-        return [self.type, self.name, self.rent, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4,
+        return [self.type, self.name, self.rent0, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4,
                 self.rentHotel, self.buildingCost, self.mortgageValue, self.unmortgageCost, self.isMortgaged,
                 self.owner, self.level]
 
@@ -274,3 +274,109 @@ class Tax:
 
     def getInfo(self):
         return [self.type, self.name, self.tax]
+
+
+class Railroad:
+    type = ''
+    name = ''
+    cost = 0
+    rent = 0
+    rent2 = 0
+    rent3 = 0
+    rent4 = 0
+    mortgageValue = 0
+    unmortgageCost = 0
+    isMortgaged = False
+    owner = ''
+    level = 0
+
+    def __init__(self, pType, pName, pCost, pRent):
+        self.type = pType
+        self.name = pName
+        self.cost = pCost
+        self.rent1 = pRent
+        self.rent2 = self.rent * 2
+        self.rent3 = self.rent2 * 2
+        self.rent4 = self.rent3 * 2
+        self.mortgageValue = self.cost / 2
+        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
+
+    def toggleIsMortgaged(self):
+        self.isMortgaged = not self.isMortgaged
+
+    def setOwner(self, newOwner):
+        self.owner = newOwner
+
+    def setLevel(self, newLevel):
+        self.level = newLevel
+
+    def getName(self):
+        return self.name
+
+    def getCost(self):
+        return self.cost
+
+    def getRent1(self):
+        return self.rent1
+
+    def getRent2(self):
+        return self.rent2
+
+    def getRent3(self):
+        return self.rent3
+
+    def getRent4(self):
+        return self.rent4
+
+    def getRents(self):
+        return [self.rent1, self.rent2, self.rent3, self.rent4]
+
+    def getMortgageValue(self):
+        return self.mortgageValue
+
+    def getUnmortgageCost(self):
+        return self.unmortgageCost
+
+    def getIsMortgaged(self):
+        return self.isMortgaged
+
+    def getOwner(self):
+        return self.owner
+
+    def getLevel(self):
+        return self.level
+
+    def getInfo(self):
+        return [self.type, self.name, self.cost, self.rent1, self.rent2, self.rent3, self.rent4, self.mortgageValue,
+                self.unmortgageCost, self.isMortgaged, self.owner, self.level]
+
+
+class NoAction:
+    type = ''
+    name = ''
+
+    def __init__(self, pType, pName):
+        self.type = pType
+        self.name = pName
+
+    def getType(self):
+        return self.type
+
+    def getName(self):
+        return self.name
+
+    def getInfo(self):
+        return [self.type, self.name]
+
+
+class Utility:
+    type = ''
+    name = ''
+    cost = 0
+    rent1 = 0
+    rent2 = 0
+    mortgageValue = 0
+    unmortgageCost = 0
+    isMortgaged = False
+    owner = ''
+    level = 0
