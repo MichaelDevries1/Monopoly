@@ -223,8 +223,8 @@ class Buildable:
     def setLevel(self, level):
         self.level = level
 
-    def setIsMortgaged(self, mortgaged):
-        self.isMortgaged = mortgaged
+    def toggleIsMortgaged(self):
+        self.isMortgaged = not self.isMortgaged
 
     def getOwner(self):
         return self.owner
@@ -373,10 +373,63 @@ class Utility:
     type = ''
     name = ''
     cost = 0
-    rent1 = 0
-    rent2 = 0
+    rent1 = 4
+    rent2 = 10
     mortgageValue = 0
     unmortgageCost = 0
     isMortgaged = False
     owner = ''
     level = 0
+
+    def __init__(self, pType, pName, pCost):
+        self.type = pType
+        self.name = pName
+        self.cost = pCost
+        self.mortgageValue = self.cost / 2
+        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
+
+    def toggleIsMortgaged(self):
+        self.isMortgaged = not self.isMortgaged
+
+    def setOwner(self, newOwner):
+        self.owner = newOwner
+
+    def setLevel(self, newLevel):
+        self.level = newLevel
+
+    def getType(self):
+        return self.type
+
+    def getName(self):
+        return self.name
+
+    def getCost(self):
+        return self.cost
+
+    def getRent1(self):
+        return self.rent1
+
+    def getRent2(self):
+        return self.rent2
+
+    def getRents(self):
+        return [self.rent1, self.rent2]
+
+    def getMortgageValue(self):
+        return self.mortgageValue
+
+    def getUnmortgageCost(self):
+        return self.unmortgageCost
+
+    def getIsMortgaged(self):
+        return self.isMortgaged
+
+    def getOwner(self):
+        return self.owner
+
+    def getLevel(self):
+        return self.level
+
+    def getInfo(self):
+        return [self.type, self.name, self.cost, self.rent1, self.rent2, self.mortgageValue, self.unmortgageCost,
+                self.isMortgaged, self.owner, self.level]
