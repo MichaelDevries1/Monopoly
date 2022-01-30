@@ -256,6 +256,24 @@ class Buildable:
                 self.owner, self.level]
 
 
+class CardDraw:
+    type = ''
+    name = ''
+
+    def __init__(self, pType, pName):
+        self.type = pType
+        self.name = pName
+
+    def getType(self):
+        return self.type
+
+    def getName(self):
+        return self.name
+
+    def getInfo(self):
+        return [self.type, self.name]
+
+
 class Tax:
     type = ''
     name = ''
