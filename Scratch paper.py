@@ -9,7 +9,7 @@ def advancetogo():
 def buildLocation(cardType):
     if cardType == "Go":
         return Go(
-            propType = "Go",
+            propType="Go",
             cardName="Go",
             cardPayment=200
         )
@@ -24,6 +24,19 @@ def buildLocation(cardType):
             pRentHotel=250,
             pBuildingCost=50
         )
+    elif cardType == 'cardDraw':
+        return CardDraw(
+            pType='cardDraw',
+            pName='Chance',
+        )
+    elif cardType == 'railroad':
+        return Railroad(
+            pType='railroad',
+            pName='Reading Railroad',
+            pCost=200,
+            pRent=25
+        )
+
 
 # Setting Variables
 # Name of all locations on the board
@@ -184,28 +197,37 @@ class Go:
         return [self.type, self.name, self.payment]
 
 
-class Buildable:
+class Property:
     type = ''
     name = ''
     cost = ''
-    rent0 = 0
+    mortgageValue = 0
+    unmortgageCost = 0
+    isMortgaged = False
+    owner = ''
+
+    def __init__(self, pType, pName, pCost):
+        self.type = pType
+        self.name = pName
+        self.cost = pCost
+        self.mortgageValue = self.cost / 2
+        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
+        self.isMortgaged = False
+
+
+class Buildable(Property):
     colorRent = 0
+    rent0 = 0
     rent1 = 0
     rent2 = 0
     rent3 = 0
     rent4 = 0
     rentHotel = 0
     buildingCost = 0
-    mortgageValue = 0
-    unmortgageCost = 0
-    isMortgaged = False
-    owner = ''
     level = 0
 
     def __init__(self, pType, pName, pCost, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
-        self.type = pType
-        self.name = pName
-        self.cost = pCost
+        super(pType, pName, pCost)
         self.rent0 = pRent
         self.colorRent = self.rent0 * 2
         self.rent1 = pRent1
