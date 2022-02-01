@@ -1,49 +1,70 @@
 import random
 import math
+import json
 
 
+def buildLocation():
+    locationNames = {}
+    cardType = ''
+    locationFile = open('C:\\Users\\compu\\Dropbox\\selfStudy\\Monopoly\\Monopoly\\Locations.json')
+    data = json.load(locationFile)
+
+    for i in data['locations']:
+        if data['locations'][i]['proptype'] == "go":
+             locationNames[i] = Go(
+                propType=data['locations'][i]['proptype'],
+                cardName=data['locations'][i]['name'],
+            )
+        elif cardType == "buildable":
+            return Buildable(
+                pType="buildable",
+                pName="Mediteranian Avenue",
+                pCost=60,
+                pRent=2,
+                pRent1=10,
+                pRent4=160,
+                pRentHotel=250,
+                pBuildingCost=50
+            )
+        elif cardType == 'railroad':
+            return Railroad(
+                pType='railroad',
+                pName='Reading Railroad',
+                pCost=200,
+                pRent=25
+            )
+        elif cardType == 'simpleLocation':
+            return SimpleLocation(
+                pType='simpleLocation',
+                pName='Free Parking'
+            )
+        elif cardType == 'utility':
+            return Utility(
+                pType='utility',
+                pName='Electric Company',
+                pCost=150
+            )
+
+    return locationNames
+
+
+name = {}
+f = open('C:\\Users\\compu\\Dropbox\\selfStudy\\Monopoly\\Monopoly\\Locations.json')
+data = json.load(f)
+
+for i in data['locations']:
+    name[i] = buildLocation(data['locations'][i])
+    print(name[i])
+
+f.close()
+'''
 def advancetogo():
     print('Advance to Go. (Collect $200) \n\n\n\n\n')
+'''
 
 
-def buildLocation(cardType):
-    if cardType == "go":
-        return Go(
-            propType="Go",
-            cardName="Go",
-            cardPayment=200
-        )
-    elif cardType == "buildable":
-        return Buildable(
-            pType="buildable",
-            pName="Mediteranian Avenue",
-            pCost=60,
-            pRent=2,
-            pRent1=10,
-            pRent4=160,
-            pRentHotel=250,
-            pBuildingCost=50
-        )
-    elif cardType == 'railroad':
-        return Railroad(
-            pType='railroad',
-            pName='Reading Railroad',
-            pCost=200,
-            pRent=25
-        )
-    elif cardType == 'simpleLocation':
-        return SimpleLocation(
-            pType='simpleLocation',
-            pName='Free Parking'
-        )
-    elif cardType == 'utility':
-        return Utility(
-            pType='utility',
-            pName='Electric Company',
-            pCost=150
-        )
 
-
+'''
 # Setting Variables
 # Name of all locations on the board
 name = {
@@ -181,7 +202,7 @@ while turn < 200:
     # Display current location
     print('Location: ', name[location])
     print('')
-
+'''
 
 class SimpleLocation:
     type = ''
