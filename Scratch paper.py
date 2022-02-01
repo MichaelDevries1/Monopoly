@@ -189,7 +189,7 @@ class Utility(Property):
     level = 0
 
     def __init__(self, pType, pName, pCost):
-        super.__init__(self, pType, pName, pCost)
+        super().__init__(pType, pName, pCost)
         self.mortgageValue = self.cost / 2
         self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
 
@@ -238,6 +238,43 @@ class Utility(Property):
     def getInfo(self):
         return [self.type, self.name, self.cost, self.rent1, self.rent2, self.mortgageValue, self.unmortgageCost,
                 self.isMortgaged, self.owner, self.level]
+
+
+class Player:
+    name = 'Player 1'
+    wallet = 0
+    inJail = False
+    ownedProperties = []
+
+    def setName(self, newName):
+        self.name = newName
+
+    def setWallet(self, amount):
+        self.wallet += amount
+
+    def addNewProperty(self, newProperty):
+        self.ownedProperties.append(newProperty)
+
+    def toggleInJail(self):
+        self.inJail = not self.inJail
+
+    def removeProperty(self, subProperty):
+        self.ownedProperties.remove(subProperty)
+
+    def getName(self):
+        return self.name
+
+    def getWallet(self):
+        return self.wallet
+
+    def getInJail(self):
+        return self.inJail
+
+    def getOwnedProperties(self):
+        return self.ownedProperties
+
+    def getInfo(self):
+        return [self.name, self.wallet, self.inJail, self.ownedProperties]
 
 
 def buildLocation():
@@ -292,7 +329,11 @@ def buildLocation():
     locationFile.close()
     return locationNames
 
-
+p1 = Player()
+p1.setName('Michael')
+p1.setWallet(2000)
+p1.setWallet(-100)
+print(p1.getInfo())
 name = buildLocation()
 '''
 def advancetogo():
