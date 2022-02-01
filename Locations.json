@@ -8,7 +8,8 @@
       "proptype": "buildable",
       "name": "Mediteranean Avenue",
       "cost": 60,
-      "rent1": 2,
+      "rent0": 2,
+      "rent1": 10,
       "rent4": 160,
       "rentHotel": 250,
       "buildingCost": 50
@@ -21,7 +22,8 @@
       "proptype": "buildable",
       "name": "Baltic Avenue",
       "cost": 60,
-      "rent1": 4,
+      "rent0": 4,
+      "rent1": 20,
       "rent4": 320,
       "rentHotel": 450,
       "buildingCost": 50
@@ -40,7 +42,8 @@
       "proptype": "buildable",
       "name": "Oriental Avenue",
       "cost": 100,
-      "rent1": 6,
+      "rent0": 6,
+      "rent1": 30,
       "rent4": 400,
       "rentHotel": 550,
       "buildingCost": 50
@@ -53,7 +56,8 @@
       "proptype": "buildable",
       "name": "Vermont Avenue",
       "cost": 100,
-      "rent1": 6,
+      "rent0": 6,
+      "rent1": 30,
       "rent4": 400,
       "rentHotel": 550,
       "buildingCost": 50
@@ -62,7 +66,8 @@
       "proptype": "buildable",
       "name": "Connecticut Avenue",
       "cost": 120,
-      "rent1": 8,
+      "rent0": 8,
+      "rent1": 40,
       "rent4": 450,
       "rentHotel": 600,
       "buildingCost": 50
@@ -75,7 +80,8 @@
       "proptype": "buildable",
       "name": "St. Charles Place",
       "cost": 140,
-      "rent1": 10,
+      "rent0": 10,
+      "rent1": 50,
       "rent4": 625,
       "rentHotel": 750,
       "buildingCost": 100
@@ -89,7 +95,8 @@
       "proptype": "buildable",
       "name": "States Avenue",
       "cost": 140,
-      "rent1": 10,
+      "rent0": 10,
+      "rent1": 50,
       "rent4": 625,
       "rentHotel": 750,
       "buildingCost": 100
@@ -98,7 +105,8 @@
       "proptype": "buildable",
       "name": "Virginia Avenue",
       "cost": 160,
-      "rent1": 12,
+      "rent0": 12,
+      "rent1": 60,
       "rent4": 700,
       "rentHotel": 900,
       "buildingCost": 100
@@ -112,7 +120,8 @@
       "proptype": "buildable",
       "name": "St. James Place",
       "cost": 180,
-      "rent1": 14,
+      "rent0": 14,
+      "rent1": 70,
       "rent4": 750,
       "rentHotel": 950,
       "buildingCost": 100
@@ -125,7 +134,8 @@
       "proptype": "buildable",
       "name": "Tennessee Avenue",
       "cost": 180,
-      "rent1": 14,
+      "rent0": 14,
+      "rent1": 70,
       "rent4": 750,
       "rentHotel": 950,
       "buildingCost": 100
@@ -134,7 +144,8 @@
       "proptype": "buildable",
       "name": "New York Avenue",
       "cost": 200,
-      "rent1": 16,
+      "rent0": 16,
+      "rent1": 80,
       "rent4": 800,
       "rentHotel": 1000,
       "buildingCost": 100
@@ -147,7 +158,8 @@
       "proptype": "buildable",
       "name": "Kentucky Avenue",
       "cost": 220,
-      "rent1": 18,
+      "rent0": 18,
+      "rent1": 90,
       "rent4": 875,
       "rentHotel": 1050,
       "buildingCost": 150
@@ -160,7 +172,8 @@
       "proptype": "buildable",
       "name": "Indiana Avenue",
       "cost": 220,
-      "rent1": 18,
+      "rent0": 18,
+      "rent1": 90,
       "rent4": 875,
       "rentHotel": 1050,
       "buildingCost": 150
@@ -169,7 +182,8 @@
       "proptype": "buildable",
       "name": "Illinois Avenue",
       "cost": 240,
-      "rent1": 20,
+      "rent0": 20,
+      "rent1": 100,
       "rent4": 925,
       "rentHotel": 110,
       "buildingCost": 150
@@ -183,7 +197,8 @@
       "proptype": "buildable",
       "name": "Atlantic Avenue",
       "cost": 260,
-      "rent1": 22,
+      "rent0": 22,
+      "rent1": 110,
       "rent4": 975,
       "rentHotel": 1150,
       "buildingCost": 150
@@ -192,7 +207,8 @@
       "proptype": "buildable",
       "name": "Ventnor Avenue",
       "cost": 260,
-      "rent1": 22,
+      "rent0": 22,
+      "rent1": 110,
       "rent4": 975,
       "rentHotel": 1150,
       "buildingCost": 150
@@ -206,7 +222,8 @@
       "proptype": "buildable",
       "name": "Marvin Gardens",
       "cost": 280,
-      "rent1": 24,
+      "rent0": 24,
+      "rent1": 120,
       "rent4": 1025,
       "rentHotel": 1200,
       "buildingCost": 150
@@ -219,7 +236,8 @@
       "proptype": "buildable",
       "name": "Pacific Avenue",
       "cost": 300,
-      "rent1": 26,
+      "rent0": 26,
+      "rent1": 130,
       "rent4": 1100,
       "rentHotel": 1275,
       "buildingCost": 200
@@ -228,7 +246,8 @@
       "proptype": "buildable",
       "name": "North Carolina Avenue",
       "cost": 300,
-      "rent1": 26,
+      "rent0": 26,
+      "rent1": 130,
       "rent4": 1100,
       "rentHotel": 1275,
       "buildingCost": 200
@@ -241,14 +260,15 @@
       "proptype": "buildable",
       "name": "Pennsylvania Avenue",
       "cost": 320,
-      "rent1": 28,
+      "rent0": 28,
+      "rent1": 150,
       "rent4": 1200,
       "rentHotel": 1400,
       "buildingCost": 200
     },
     {
       "proptype": "railroad",
-      "name": "Short Railroad",
+      "name": "Short Line",
       "cost": 200
     },
     {
@@ -259,7 +279,8 @@
       "proptype": "buildable",
       "name": "Park Place",
       "cost": 350,
-      "rent1": 35,
+      "rent0": 35,
+      "rent1": 175,
       "rent4": 1300,
       "rentHotel": 1500,
       "buildingCost": 200
@@ -273,7 +294,8 @@
       "proptype": "buildable",
       "name": "Boardwalk",
       "cost": 400,
-      "rent1": 50,
+      "rent0": 50,
+      "rent1": 200,
       "rent4": 1700,
       "rentHotel": 2000,
       "buildingCost": 200
