@@ -244,6 +244,9 @@ class Player:
     name = 'Player 1'
     wallet = 0
     inJail = False
+    #Get out of jail free cards held by player. One for chance and community chest draws.
+    goojfChance = False
+    goojfComm = False
     ownedProperties = []
 
     def setName(self, newName):
@@ -258,6 +261,12 @@ class Player:
     def toggleInJail(self):
         self.inJail = not self.inJail
 
+    def toggleGOoJFChance(self):
+        self.goojfChance = not self.goojfChance
+
+    def toggleGOoJFComm(self):
+        self.goojfComm = not self.goojfComm
+
     def removeProperty(self, subProperty):
         self.ownedProperties.remove(subProperty)
 
@@ -269,6 +278,12 @@ class Player:
 
     def getInJail(self):
         return self.inJail
+
+    def getGOoJFChance(self):
+        return self.goojfChance
+
+    def getGOoJFComm(self):
+        return self.goojfComm
 
     def getOwnedProperties(self):
         return self.ownedProperties
