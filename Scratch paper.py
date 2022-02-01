@@ -302,18 +302,14 @@ class Tax(SimpleLocation):
 
 
 class Railroad(Property):
-    rent = 0
-    rent2 = 0
-    rent3 = 0
-    rent4 = 0
+    rent1 = 25
+    rent2 = 50
+    rent3 = 100
+    rent4 = 200
     level = 0
 
-    def __init__(self, pType, pName, pCost, pRent):
+    def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
-        self.rent1 = pRent
-        self.rent2 = self.rent * 2
-        self.rent3 = self.rent2 * 2
-        self.rent4 = self.rent3 * 2
 
     def toggleIsMortgaged(self):
         self.isMortgaged = not self.isMortgaged
