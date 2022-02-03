@@ -120,7 +120,8 @@ class Buildable(Property):
 
 
 class Tax(SimpleLocation):
-    tax = 0
+    # Tax location objects. This includes income and luxury tax locations.
+    tax = 0         # The amount a player has to play
 
     def __init__(self, pType, pName, pTax):
         super().__init__(pType, pName)
@@ -134,11 +135,12 @@ class Tax(SimpleLocation):
 
 
 class Railroad(Property):
-    rent1 = 25
-    rent2 = 50
-    rent3 = 100
-    rent4 = 200
-    level = 0
+    # Third level of objects for railroad properties.
+    rent1 = 25      # rent received when a player lands on 1 owned railroad
+    rent2 = 50      # rent received when a player lands on 2 owned railroads
+    rent3 = 100     # rent received when a player lands on 3 owned railroads
+    rent4 = 200     # rent received when a player lands on 4 owned railroads
+    level = 0       # Current number of railroads owned by owner. 0=none, 1=1 railroad.. 4=all railroads.
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
@@ -194,9 +196,10 @@ class Railroad(Property):
 
 
 class Utility(Property):
-    rent1 = 4
-    rent2 = 10
-    level = 0
+    # Third level of objects for utility properties.
+    rent1 = 4       # dice roll multiple received when a player lands on 1 owned utility
+    rent2 = 10      # dice roll multiple received when a player lands on 2 owned utilities
+    level = 0       # Current number of utilities owned by owner. 0=none, 1=1 utility, or 2=2 utilities
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
@@ -251,13 +254,13 @@ class Utility(Property):
 
 
 class Player:
-    name = 'Player 1'
-    wallet = 0
-    inJail = False
+    name = 'Player 1'       # Default name for a single player.
+    wallet = 0              # Default amount in players wallet. (usually overwritten with $1500 upon creation)
+    inJail = False          # Determines if player is currently in Jail or not
     # Get out of jail free cards held by player. One for chance and community chest draws.
     goojfChance = False
     goojfComm = False
-    ownedProperties = []
+    ownedProperties = []    # List of all owned property objects
 
     def __init__(self, pName):
         self.name = pName
@@ -372,6 +375,7 @@ def newGame():
     LocationName = buildLocation()  # The dictionary of all location objects
 
 
+# The start of the main program at this point 2/3/22
 # Setting initial global variables
 maxBankCash = 28580     # Maximum amount of cash used in the game
 maxHouses = 0           # Maximum amount of houses used in the game
