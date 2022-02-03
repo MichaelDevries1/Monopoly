@@ -2,7 +2,9 @@ import random
 import math
 import json
 
+
 class SimpleLocation:
+    # The basic location object. It allows for the retrieval of the name and type of location.
     type = ''
     name = ''
 
@@ -21,6 +23,7 @@ class SimpleLocation:
 
 
 class Go(SimpleLocation):
+    # The Go location object. Requires the SimpleLocation object. Used to retrieve information for "Go"
     payment = 200
 
     def __init__(self, propType, cardName):
@@ -34,11 +37,12 @@ class Go(SimpleLocation):
 
 
 class Property(SimpleLocation):
-    cost = ''
-    mortgageValue = 0
-    unmortgageCost = 0
-    isMortgaged = False
-    owner = ''
+    # Second level of object for any location that can be owned. This includes buildables, railroads, and utilities.
+    cost = ''               # Cost of purchasing the property
+    mortgageValue = 0       # How much player gets if property is mortgaged
+    unmortgageCost = 0      # How much player pays to unmortgage the property
+    isMortgaged = False     # Is the property currently mortgaged?
+    owner = ''              # Player that owns the property.
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName)
@@ -68,18 +72,21 @@ class Property(SimpleLocation):
 
 
 class Buildable(Property):
-    colorRent = 0
-    rent0 = 0
-    rent1 = 0
-    rent2 = 0
-    rent3 = 0
-    rent4 = 0
-    rentHotel = 0
-    buildingCost = 0
-    level = 0
+    # Third level of objects for properties that can have houses and hotels built upon them.
+    color = ''          # The color group of the property.
+    colorRent = 0       # The amount of rent collected once all of that color is collected
+    rent0 = 0           # The amount of rent collected with 0 houses
+    rent1 = 0           # The amount of rent collected with 1 house
+    rent2 = 0           # The amount of rent collected with 2 houses
+    rent3 = 0           # The amount of rent collected with 3 houses
+    rent4 = 0           # The amount of rent collected with 4 houses
+    rentHotel = 0       # The amount of rent collected with a hotel
+    buildingCost = 0    # The cost for building one structure (house/hotel)
+    level = 0           # The current number of houses/hotel on property. 0=0 houses, 1=1 house...4=4 houses, 5=hotel.
 
-    def __init__(self, pType, pName, pCost, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
+    def __init__(self, pType, pName, pCost, pColor, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
         super().__init__(pType, pName, pCost)
+        self.color = pColor
         self.rent0 = pRent
         self.colorRent = self.rent0 * 2
         self.rent1 = pRent1
@@ -94,6 +101,9 @@ class Buildable(Property):
     def setLevel(self, level):
         self.level = level
 
+    def getColor(self):
+        return self.color
+
     def getLevel(self):
         return self.level
 
@@ -104,9 +114,9 @@ class Buildable(Property):
         return self.buildingCost
 
     def getInfo(self):
-        return [self.type, self.name, self.rent0, self.colorRent, self.rent1, self.rent2, self.rent3, self.rent4,
-                self.rentHotel, self.buildingCost, self.mortgageValue, self.unmortgageCost, self.isMortgaged,
-                self.owner, self.level]
+        return [self.type, self.name, self.color, self.rent0, self.colorRent, self.rent1, self.rent2, self.rent3,
+                self.rent4, self.rentHotel, self.buildingCost, self.mortgageValue, self.unmortgageCost,
+                self.isMortgaged, self.owner, self.level]
 
 
 class Tax(SimpleLocation):
@@ -244,13 +254,14 @@ class Player:
     name = 'Player 1'
     wallet = 0
     inJail = False
-    #Get out of jail free cards held by player. One for chance and community chest draws.
+    # Get out of jail free cards held by player. One for chance and community chest draws.
     goojfChance = False
     goojfComm = False
     ownedProperties = []
 
-    def setName(self, newName):
-        self.name = newName
+    def __init__(self, pName):
+        self.name = pName
+        self.wallet = 1500
 
     def setWallet(self, amount):
         self.wallet += amount
@@ -339,17 +350,39 @@ def buildLocation():
                 pName=data['locations'][x]['name'],
                 pCost=data['locations'][x]['cost']
             )
-        print(str(x), ': ', locationNames.get(x).getName())
+        # print(str(x), ': ', locationNames.get(x).getName())
         x += 1
     locationFile.close()
     return locationNames
 
-p1 = Player()
-p1.setName('Michael')
-p1.setWallet(2000)
-p1.setWallet(-100)
-print(p1.getInfo())
-name = buildLocation()
+
+def playerSetup(playerName):
+    return Player(playerName)
+
+
+def newGame():
+    # Resets the basic variables to starting state. Also allows creation of players.
+    global bankCash
+    global bankHouses
+    global bankHotels
+    global LocationName
+    bankCash = 28580    # Bank will always start with $28580 in cash.
+    bankHouses = 32     # Bank will always start with 32 available houses.
+    bankHotels = 12     # Bank will always start with 12 available hotels.
+    LocationName = buildLocation()  # The dictionary of all location objects
+
+
+# Setting initial global variables
+maxBankCash = 28580     # Maximum amount of cash used in the game
+maxHouses = 0           # Maximum amount of houses used in the game
+maxHotels = 0           # Maximum amount of hotels used in the game
+bankCash = 0            # Current amount of cash in the bank
+bankHouses = 0          # Current amount of available houses
+bankHotels = 0          # Current amount of available hotels
+locationName = {}       # Dictionary of all location objects for the board
+
+newGame()               # Reset the game to its basic beginning state
+
 '''
 def advancetogo():
     print('Advance to Go. (Collect $200) \n\n\n\n\n')
