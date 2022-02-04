@@ -82,7 +82,8 @@ class Buildable(Property):
     rent4 = 0           # The amount of rent collected with 4 houses
     rentHotel = 0       # The amount of rent collected with a hotel
     buildingCost = 0    # The cost for building one structure (house/hotel)
-    level = 0           # The current number of houses/hotel on property. 0=0 houses, 1=1 house...4=4 houses, 5=hotel.
+    level = 0           # The current number of houses/hotel on property. 0=0 houses, 1=colorRent, 2=1 house
+    #                     ...5=4 houses, 6=hotel.
 
     def __init__(self, pType, pName, pCost, pColor, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
         super().__init__(pType, pName, pCost)
@@ -375,6 +376,162 @@ def newGame():
     LocationName = buildLocation()  # The dictionary of all location objects
 
 
+def playerPayRequest(player, amount):
+    if player.wallet > amount:
+        player.wallet -= amount
+    else:
+        print('You need more money! Do you want to mortgage some of your properties?')
+
+
+def bankPayRequest(amount):
+    global bankCash                     # Check the amount of cash in the bank
+    if bankCash > amount:               # check if the bank has more than the requested amount
+        bankCash -= amount              # subtract the amount from the bank
+        return amount                   # return how much player will receive
+    else:
+        print('The bank doens\'t currently have that much. You get whats left which is $', bankCash)
+        remainder = bankCash            # set how much the player will actually receive
+        bankCash = 0                    # set the bank cash to $0
+        return remainder                # return how much player will receive
+
+
+# START OF CHANCE CARD ACTIONS
+def advancetoboardwalk():
+    print('Advance to Boardwalk')
+
+
+def advancetogo():
+    print('Advance to Go')
+
+
+def advancetoillinoisavenue():
+    print('Advance to Illinois Avenue. If you pass Go, collect $200')
+
+
+def advancetostcharlesplace():
+    print('Advance to St. Charles Place. If you pass Go, collect $200')
+
+
+def advancetothenearestrailroad():
+    print('Advance to the nearest railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the '
+          'rental to which they are otherwise entitled.')
+
+
+def advancetonearestutility():
+    print('Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay '
+          'owner a total of ten times amount thrown.')
+
+
+def bankpaysyou():
+    print('Bank pays you dividend of $50')
+
+
+def getoutofjailchance():
+    print('Get Out of Jail Free')
+
+
+def goback3():
+    print('Go back 3 spaces.')
+
+
+def gotojail():
+    print('Go to Jail. Go directly to Jail, do not pass Go, do not collect $200')
+
+
+def makegeneralrepairs():
+    print('Make general repairs on all your property. For each house pay $25. For each hotel pay $100.')
+
+
+def speedingfine():
+    print('Speeding fine $15')
+
+
+def triptoreadingrailroad():
+    print('Take a trip to Reading Railroad. If you pass Go, collect $200')
+
+
+def electedchariman():
+    print('You have been elected Chairman of the Board. Pay each player $50')
+
+
+def buildingloanmatures():
+    print('Your building loan matures. Collect $150')
+
+
+# START OF COMMUNITY CHEST CARD ACTIONS
+def bankerror():
+    print('Bank error in your favor. Collect $200')
+
+
+def doctorsfee():
+    print("Doctor's fee. Pay $50")
+
+
+def saleofstock():
+    print('From sale of stock you get $50')
+
+
+def getoutofjailcomm():
+    print('Get Out of Jail Free')
+
+
+def holidayfund():
+    print('Holiday fund matures. Receive $100')
+
+
+def incometaxrefund():
+    print('Income tax refund. Collect $20')
+
+
+def birthday():
+    print('It is your birthday. Collect $10 from every player.')
+
+
+def lifeinsurancematures():
+    print('Life insurance matures. Collect $100.')
+
+
+def payhospitalfees():
+    print('Pay hospital fees of $100')
+
+
+def payschoolfees():
+    print('Pay school fees of $50')
+
+
+def consultancyfee(player):
+    print('Receive $25 consultancy fee.')
+    player.setWallet(25)
+
+
+def streetrepair(player):
+    print('You are assessed for street repair. $40 per house. $115 per hotel.')
+    numHomes = 0                                    # number of homes player owns
+    numHotels = 0                                   # number of hotels player owns
+    propertyCount = player.getOwnedProperties()     # get the list of locations player owns
+    # count the number of homes and hotels on each property
+    for i in propertyCount:
+        types = locationName[i].getType()           # get the type of property
+        if types is "buildable":
+            level = locationName[i].getLevel()      # get the level of property
+            if level is 6:                          # check for hotel
+                numHotels += 1
+            elif 1 < level < 6:                     # check number of homes
+                numHomes = numHomes + level - 1
+    playerPayRequest(player, (numHomes * 40 + numHotels * 115))  # check to see if player can pay amount
+
+
+def beautycontest(player):
+    print('You have won second prize in a beauty contest. Collect $10')
+    player.setWallet(10)
+
+
+def inherit(player):
+    # Requires a player object. Adds $100 to players wallet.
+    print('You inherit $100.')
+    player.setWallet(100)
+
+
 # The start of the main program at this point 2/3/22
 # Setting initial global variables
 maxBankCash = 28580     # Maximum amount of cash used in the game
@@ -384,109 +541,37 @@ bankCash = 0            # Current amount of cash in the bank
 bankHouses = 0          # Current amount of available houses
 bankHotels = 0          # Current amount of available hotels
 locationName = {}       # Dictionary of all location objects for the board
-
-newGame()               # Reset the game to its basic beginning state
-
-'''
-def advancetogo():
-    print('Advance to Go. (Collect $200) \n\n\n\n\n')
-
-# Setting Variables
-# Name of all locations on the board
-name = {
-    0: "Go",
-    1: 'Mediterranean Avenue',
-    2: 'Community Chest',
-    3: 'Baltic Avenue',
-    4: 'Income Tax',
-    5: 'Reading Railroad',
-    6: 'Oriental Avenue',
-    7: 'Chance',
-    8: 'Vermont Avenue',
-    9: 'Connecticut Avenue',
-    10: 'Just Visiting',
-    11: 'St. Charles Place',
-    12: 'Electric Company',
-    13: 'States Avenue',
-    14: 'Virginia Avenue',
-    15: 'Pennsylvania Railroad',
-    16: 'St. James Place',
-    17: 'Community Chest',
-    18: 'Tennessee Avenue',
-    19: 'New York Avenue',
-    20: 'Free Parking',
-    21: 'Kentucky Avenue',
-    22: 'Chance',
-    23: 'Indiana Avenue',
-    24: 'Illinois Avenue',
-    25: 'B&O Railroad',
-    26: 'Atlantic Avenue',
-    27: 'Ventnor Avenue',
-    28: 'Water Works',
-    29: 'Marvin Gardens',
-    30: 'Go To Jail',
-    31: 'Pacific Avenue',
-    32: 'North Carolina Avenue',
-    33: 'Community Chest',
-    34: 'Pennsylvania Avenue',
-    35: 'Short Line',
-    36: 'Chance',
-    37: 'Park Place',
-    38: 'Luxury Tax',
-    39: 'Boardwalk',
-    40: 'In Jail'
-}
-# All Chance cards
-chance = {
-    1: 'Advance to Boardwalk',
-    2: 'Advance to Go',
-    3: 'Advance to Illinois Avenue. If you pass Go, collect $200',
-    4: 'Advance to St. Charles Place. If you pass Go, collect $200',
-    5: 'Advance to the nearest railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental'
-       'to which they are otherwise entitled.',
-    6: 'Advance to the nearest railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the rental'
-       'to which they are otherwise entitled.',
-    7: 'Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay owner'
-       'a total of ten times amount thrown.',
-    8: 'Bank pays you dividend of $50',
-    9: 'Get Out of Jail Free',
-    10: 'Go back 3 spaces',
-    11: 'Go to Jail. Go directly to Jail, do not pass Go, do not collect $200',
-    12: 'Make general repairs on all your property. For each house pay $25. For each hotel pay $100.',
-    13: 'Speeding fine $15',
-    14: 'Take a trip to Reading Railroad. If you pass Go, collect $200',
-    15: 'You have been elected Chairman of the Board. Pay each player $50',
-    16: 'Your building loan matures. Collect $150'
-}
-# All Community Chest Cards
-com_chest = {
-    1: 'advancetogo()',
-    2: 'Bank error in your favor. Collect $200',
-    3: "Doctor's fee. Pay $50",
-    4: 'From sale of stock you get $50',
-    5: 'Get Out of Jail Free',
-    6: 'Go to Jail. Go directly to Jail, do not pass Go, do not collect $200',
-    7: 'Holiday fund matures. Receive $100',
-    8: 'Income tax refund. Collect $20',
-    9: 'It is your birthday. Collect $10 from every player.',
-    10: 'Life insurance matures. Collect $100.',
-    11: 'Pay hospital fees of $100',
-    12: 'Pay school fees of $50',
-    13: 'Receive $25 consultancy fee.',
-    14: 'You are assessed for street repair. $40 per house. $115 per hotel.',
-    15: 'You have won second prize in a beauty contest. Collect $10',
-    16: 'You inherit $100.'
-}
 # Dice variables
 dice1 = -1
 dice2 = -1
-double_count = 0
-# Player Location on the board
-location = 0
-# Turn number this game
-turn = 0
-cardType = "Go"
+double_count = 0        # Count of how many doubles a player has received in a row
+location = 0            # Player Location on the board
+turn = 0                # Turn number this game
+# All Chance cards
+chance = {
+    1: 'advancetoboardwalk()',              2: 'advancetogo()',
+    3: 'advancetoillinoisavenue()',         4: 'advancetostcharlesplace()',
+    5: 'advancetothenearestrailroad()',     6: 'advancetothenearestrailroad()',
+    7: 'advancetonearestutility()',         8: 'bankpaysyou()',
+    9: 'getoutofjailchance()',              10: 'goback3()',
+    11: 'gotojailchance()',                 12: 'makegeneralrepairs()',
+    13: 'speedingfine()',                   14: 'triptoreadingrailroad()',
+    15: 'electedchariman()',                16: 'buildingloanmatures()'
+}
+# All Community Chest Cards
+com_chest = {
+    1: 'advancetogo()',                     2: 'bankerror()',
+    3: 'doctorsfee()',                      4: 'saleofstock()',
+    5: 'getoutofjailcomm()',                6: 'gotojail()',
+    7: 'holidayfund()',                     8: 'incometaxrefund()',
+    9: 'birthday()',                        10: 'lifeinsurancematures()',
+    11: 'payhospitalfees()',                12: 'payschoolfees()',
+    13: 'consultancyfee()',                 14: 'streetrepair()',
+    15: 'beautycontest()',                  16: 'inherit()'
+}
 
+newGame()               # Reset the game to its basic beginning state
+'''
 while turn < 200:
     # Increase turn count and display
     turn += 1
