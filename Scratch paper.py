@@ -529,6 +529,7 @@ def beautycontest(player):
 def inherit(player):
     # Requires a player object. Adds $100 to players wallet.
     print('You inherit $100.')
+    bankPayRequest(100)
     player.setWallet(100)
 
 
