@@ -1,7 +1,7 @@
-import random
-import math
 import json
-
+import math
+import io
+import player
 
 class SimpleLocation:
     # The basic location object. It allows for the retrieval of the name and type of location.
@@ -38,11 +38,11 @@ class Go(SimpleLocation):
 
 class Property(SimpleLocation):
     # Second level of object for any location that can be owned. This includes buildables, railroads, and utilities.
-    cost = ''               # Cost of purchasing the property
-    mortgageValue = 0       # How much player gets if property is mortgaged
-    unmortgageCost = 0      # How much player pays to unmortgage the property
-    isMortgaged = False     # Is the property currently mortgaged?
-    owner = ''              # Player that owns the property.
+    cost = ''  # Cost of purchasing the property
+    mortgageValue = 0  # How much player gets if property is mortgaged
+    unmortgageCost = 0  # How much player pays to unmortgage the property
+    isMortgaged = False  # Is the property currently mortgaged?
+    owner = ''  # Player that owns the property.
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName)
@@ -73,16 +73,17 @@ class Property(SimpleLocation):
 
 class Buildable(Property):
     # Third level of objects for properties that can have houses and hotels built upon them.
-    color = ''          # The color group of the property.
-    colorRent = 0       # The amount of rent collected once all of that color is collected
-    rent0 = 0           # The amount of rent collected with 0 houses
-    rent1 = 0           # The amount of rent collected with 1 house
-    rent2 = 0           # The amount of rent collected with 2 houses
-    rent3 = 0           # The amount of rent collected with 3 houses
-    rent4 = 0           # The amount of rent collected with 4 houses
-    rentHotel = 0       # The amount of rent collected with a hotel
-    buildingCost = 0    # The cost for building one structure (house/hotel)
-    level = 0           # The current number of houses/hotel on property. 0=0 houses, 1=colorRent, 2=1 house
+    color = ''  # The color group of the property.
+    colorRent = 0  # The amount of rent collected once all of that color is collected
+    rent0 = 0  # The amount of rent collected with 0 houses
+    rent1 = 0  # The amount of rent collected with 1 house
+    rent2 = 0  # The amount of rent collected with 2 houses
+    rent3 = 0  # The amount of rent collected with 3 houses
+    rent4 = 0  # The amount of rent collected with 4 houses
+    rentHotel = 0  # The amount of rent collected with a hotel
+    buildingCost = 0  # The cost for building one structure (house/hotel)
+    level = 0  # The current number of houses/hotel on property. 0=0 houses, 1=colorRent, 2=1 house
+
     #                     ...5=4 houses, 6=hotel.
 
     def __init__(self, pType, pName, pCost, pColor, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
@@ -122,7 +123,7 @@ class Buildable(Property):
 
 class Tax(SimpleLocation):
     # Tax location objects. This includes income and luxury tax locations.
-    tax = 0         # The amount a player has to play
+    tax = 0  # The amount a player has to play
 
     def __init__(self, pType, pName, pTax):
         super().__init__(pType, pName)
@@ -137,11 +138,11 @@ class Tax(SimpleLocation):
 
 class Railroad(Property):
     # Third level of objects for railroad properties.
-    rent1 = 25      # rent received when a player lands on 1 owned railroad
-    rent2 = 50      # rent received when a player lands on 2 owned railroads
-    rent3 = 100     # rent received when a player lands on 3 owned railroads
-    rent4 = 200     # rent received when a player lands on 4 owned railroads
-    level = 0       # Current number of railroads owned by owner. 0=none, 1=1 railroad.. 4=all railroads.
+    rent1 = 25  # rent received when a player lands on 1 owned railroad
+    rent2 = 50  # rent received when a player lands on 2 owned railroads
+    rent3 = 100  # rent received when a player lands on 3 owned railroads
+    rent4 = 200  # rent received when a player lands on 4 owned railroads
+    level = 0  # Current number of railroads owned by owner. 0=none, 1=1 railroad.. 4=all railroads.
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
@@ -198,9 +199,9 @@ class Railroad(Property):
 
 class Utility(Property):
     # Third level of objects for utility properties.
-    rent1 = 4       # dice roll multiple received when a player lands on 1 owned utility
-    rent2 = 10      # dice roll multiple received when a player lands on 2 owned utilities
-    level = 0       # Current number of utilities owned by owner. 0=none, 1=1 utility, or 2=2 utilities
+    rent1 = 4  # dice roll multiple received when a player lands on 1 owned utility
+    rent2 = 10  # dice roll multiple received when a player lands on 2 owned utilities
+    level = 0  # Current number of utilities owned by owner. 0=none, 1=1 utility, or 2=2 utilities
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
@@ -252,60 +253,6 @@ class Utility(Property):
     def getInfo(self):
         return [self.type, self.name, self.cost, self.rent1, self.rent2, self.mortgageValue, self.unmortgageCost,
                 self.isMortgaged, self.owner, self.level]
-
-
-class Player:
-    name = 'Player 1'       # Default name for a single player.
-    wallet = 0              # Default amount in players wallet. (usually overwritten with $1500 upon creation)
-    inJail = False          # Determines if player is currently in Jail or not
-    # Get out of jail free cards held by player. One for chance and community chest draws.
-    goojfChance = False
-    goojfComm = False
-    ownedProperties = []    # List of all owned property objects
-
-    def __init__(self, pName):
-        self.name = pName
-        self.wallet = 1500
-
-    def setWallet(self, amount):
-        self.wallet += amount
-
-    def addNewProperty(self, newProperty):
-        self.ownedProperties.append(newProperty)
-
-    def toggleInJail(self):
-        self.inJail = not self.inJail
-
-    def toggleGOoJFChance(self):
-        self.goojfChance = not self.goojfChance
-
-    def toggleGOoJFComm(self):
-        self.goojfComm = not self.goojfComm
-
-    def removeProperty(self, subProperty):
-        self.ownedProperties.remove(subProperty)
-
-    def getName(self):
-        return self.name
-
-    def getWallet(self):
-        return self.wallet
-
-    def getInJail(self):
-        return self.inJail
-
-    def getGOoJFChance(self):
-        return self.goojfChance
-
-    def getGOoJFComm(self):
-        return self.goojfComm
-
-    def getOwnedProperties(self):
-        return self.ownedProperties
-
-    def getInfo(self):
-        return [self.name, self.wallet, self.inJail, self.ownedProperties]
-
 
 def buildLocation():
     locationNames = {}
@@ -370,208 +317,242 @@ def newGame():
     global bankHouses
     global bankHotels
     global LocationName
-    bankCash = 28580    # Bank will always start with $28580 in cash.
-    bankHouses = 32     # Bank will always start with 32 available houses.
-    bankHotels = 12     # Bank will always start with 12 available hotels.
+    bankCash = 28580  # Bank will always start with $28580 in cash.
+    bankHouses = 32  # Bank will always start with 32 available houses.
+    bankHotels = 12  # Bank will always start with 12 available hotels.
     LocationName = buildLocation()  # The dictionary of all location objects
 
 
-def playerPayRequest(player, amount):
-    if player.wallet > amount:
-        player.wallet -= amount
-    else:
-        print('You need more money! Do you want to mortgage some of your properties?')
-
-
 def bankPayRequest(amount):
-    global bankCash                     # Check the amount of cash in the bank
-    if bankCash > amount:               # check if the bank has more than the requested amount
-        bankCash -= amount              # subtract the amount from the bank
-        return amount                   # return how much player will receive
+    global bankCash  # Check the amount of cash in the bank
+    if bankCash > amount:  # check if the bank has more than the requested amount
+        bankCash -= amount  # subtract the amount from the bank
+        return amount  # return how much player will receive
     else:
         print('The bank doens\'t currently have that much. You get whats left which is $', bankCash)
-        remainder = bankCash            # set how much the player will actually receive
-        bankCash = 0                    # set the bank cash to $0
-        return remainder                # return how much player will receive
+        remainder = bankCash  # set how much the player will actually receive
+        bankCash = 0  # set the bank cash to $0
+        return remainder  # return how much player will receive
 
 
 # START OF CHANCE CARD ACTIONS
 def advancetoboardwalk():
-    print('Advance to Boardwalk')
+    print('Advance to Boardwalk')  # card text
 
 
 def advancetogo():
-    print('Advance to Go')
+    print('Advance to Go')  # card text
 
 
 def advancetoillinoisavenue():
-    print('Advance to Illinois Avenue. If you pass Go, collect $200')
+    print('Advance to Illinois Avenue. If you pass Go, collect $200')  # card text
 
 
 def advancetostcharlesplace():
-    print('Advance to St. Charles Place. If you pass Go, collect $200')
+    print('Advance to St. Charles Place. If you pass Go, collect $200')  # card text
 
 
 def advancetothenearestrailroad():
     print('Advance to the nearest railroad. If unowned, you may buy it from the Bank. If owned, pay owner twice the '
-          'rental to which they are otherwise entitled.')
+          'rental to which they are otherwise entitled.')  # card text
 
 
 def advancetonearestutility():
     print('Advance token to nearest Utility. If unowned, you may buy it from the Bank. If owned, throw dice and pay '
-          'owner a total of ten times amount thrown.')
+          'owner a total of ten times amount thrown.')  # card text
 
 
 def bankpaysyou():
-    print('Bank pays you dividend of $50')
+    print('Bank pays you dividend of $50')  # card text
 
 
 def getoutofjailchance():
-    print('Get Out of Jail Free')
+    print('Get Out of Jail Free')  # card text
 
 
 def goback3():
-    print('Go back 3 spaces.')
+    print('Go back 3 spaces.')  # card text
 
 
 def gotojail():
-    print('Go to Jail. Go directly to Jail, do not pass Go, do not collect $200')
+    print('Go to Jail. Go directly to Jail, do not pass Go, do not collect $200')  # card text
 
 
 def makegeneralrepairs():
-    print('Make general repairs on all your property. For each house pay $25. For each hotel pay $100.')
+    print('Make general repairs on all your property. For each house pay $25. For each hotel pay $100.')  # card text
 
 
 def speedingfine():
-    print('Speeding fine $15')
+    print('Speeding fine $15')  # card text
 
 
 def triptoreadingrailroad():
-    print('Take a trip to Reading Railroad. If you pass Go, collect $200')
+    print('Take a trip to Reading Railroad. If you pass Go, collect $200')  # card text
 
 
 def electedchariman():
-    print('You have been elected Chairman of the Board. Pay each player $50')
+    print('You have been elected Chairman of the Board. Pay each player $50')  # card text
 
 
 def buildingloanmatures():
-    print('Your building loan matures. Collect $150')
+    print('Your building loan matures. Collect $150')  # card text
 
 
 # START OF COMMUNITY CHEST CARD ACTIONS
-def bankerror():
-    print('Bank error in your favor. Collect $200')
+def community_chest(player, action, message, amount1, amount2):
+    print(message)
+    io.log_event(player + ", " + message)
+
+    if action is 'collect':
+        collect(player, amount1)
+    elif action is 'pay':
+        player.layerPayBankRequest(player, amount1)
+    elif action is 'gotojail':
+        gotojail()
+    elif action is 'getoutofjailfree':
+        player.getoutofjailcomm()
+    elif action is 'repairs':
+        repairs(player, amount1, amount2)
 
 
-def doctorsfee():
-    print("Doctor's fee. Pay $50")
+def collect(player, amount):
+    payamount = bankPayRequest(amount)
+    player.setWallet(payamount)
 
 
-def saleofstock():
-    print('From sale of stock you get $50')
+def repairs(player, houseCost, hotelCost):
+    numHomes = 0  # number of homes player owns
+    numHotels = 0  # number of hotels player owns
+    propertyCount = player.getOwnedProperties()  # get the list of locations player owns
+    # count the number of homes and hotels on each property
+    for i in propertyCount:
+        types = locationName[i].getType()  # get the type of property
+        if types is "buildable":
+            level = locationName[i].getLevel()  # get the level of property
+            if level is 6:  # check for hotel
+                numHotels += 1
+            elif 1 < level < 6:  # check number of homes
+                numHomes = numHomes + level - 1
+    player.playerPayBankRequest(player, (numHomes * houseCost + numHotels * hotelCost))  # check to see if player can pay amount
 
 
-def getoutofjailcomm():
-    print('Get Out of Jail Free')
-
-
-def holidayfund():
-    print('Holiday fund matures. Receive $100')
-
-
-def incometaxrefund():
-    print('Income tax refund. Collect $20')
+def incometaxrefund(player):
+    print('"Income tax refund. Collect $20"')  # card text
+    payamount = bankPayRequest(20)  # check if bank has enough to pay player
+    player.setWallet(payamount)  # pay player what bank allows
 
 
 def birthday():
-    print('It is your birthday. Collect $10 from every player.')
+    print('"It is your birthday. Collect $10 from every player."')  # card text
 
 
-def lifeinsurancematures():
-    print('Life insurance matures. Collect $100.')
+def lifeinsurancematures(player):
+    print('Life insurance matures. Collect $100.')  # card text
+    payamount = bankPayRequest(100)  # check if bank has enough to pay player
+    player.setWallet(payamount)  # pay player what bank allows
 
 
-def payhospitalfees():
-    print('Pay hospital fees of $100')
+def payhospitalfees(player):
+    print('Pay hospital fees of $100')  # card text
+    player.playerPayBankRequest(player, 100)  # check to see if player can pay amount
 
 
-def payschoolfees():
-    print('Pay school fees of $50')
+def payschoolfees(player):
+    print('Pay school fees of $50')  # card text
+    player.playerPayBankRequest(player, 50)  # check to see if player can pay amount
 
 
 def consultancyfee(player):
-    print('Receive $25 consultancy fee.')
-    player.setWallet(25)
+    print('Receive $25 consultancy fee.')  # card text
+    payamount = bankPayRequest(25)  # check if bank has enough to pay player
+    player.setWallet(payamount)  # pay player what bank allows
 
 
 def streetrepair(player):
-    print('You are assessed for street repair. $40 per house. $115 per hotel.')
-    numHomes = 0                                    # number of homes player owns
-    numHotels = 0                                   # number of hotels player owns
-    propertyCount = player.getOwnedProperties()     # get the list of locations player owns
+    print('You are assessed for street repair. $40 per house. $115 per hotel.')  # card text
+    numHomes = 0  # number of homes player owns
+    numHotels = 0  # number of hotels player owns
+    propertyCount = player.getOwnedProperties()  # get the list of locations player owns
     # count the number of homes and hotels on each property
     for i in propertyCount:
-        types = locationName[i].getType()           # get the type of property
+        types = locationName[i].getType()  # get the type of property
         if types is "buildable":
-            level = locationName[i].getLevel()      # get the level of property
-            if level is 6:                          # check for hotel
+            level = locationName[i].getLevel()  # get the level of property
+            if level is 6:  # check for hotel
                 numHotels += 1
-            elif 1 < level < 6:                     # check number of homes
+            elif 1 < level < 6:  # check number of homes
                 numHomes = numHomes + level - 1
-    playerPayRequest(player, (numHomes * 40 + numHotels * 115))  # check to see if player can pay amount
+    player.playerPayBankRequest(player, (numHomes * 40 + numHotels * 115))  # check to see if player can pay amount
 
 
 def beautycontest(player):
-    print('You have won second prize in a beauty contest. Collect $10')
-    player.setWallet(10)
+    print('You have won second prize in a beauty contest. Collect $10')  # card text
+    payamount = bankPayRequest(10)  # check if bank has enough to pay player
+    player.setWallet(payamount)  # pay player what bank allows
 
 
 def inherit(player):
     # Requires a player object. Adds $100 to players wallet.
-    print('You inherit $100.')
-    bankPayRequest(100)
-    player.setWallet(100)
+    print('You inherit $100.')  # card text
+    payamount = bankPayRequest(100)  # check if bank has enough to pay player
+    player.setWallet(payamount)  # pay player what bank allows
 
 
 # The start of the main program at this point 2/3/22
 # Setting initial global variables
-maxBankCash = 28580     # Maximum amount of cash used in the game
-maxHouses = 0           # Maximum amount of houses used in the game
-maxHotels = 0           # Maximum amount of hotels used in the game
-bankCash = 0            # Current amount of cash in the bank
-bankHouses = 0          # Current amount of available houses
-bankHotels = 0          # Current amount of available hotels
-locationName = {}       # Dictionary of all location objects for the board
+maxBankCash = 28580  # Maximum amount of cash used in the game
+maxHouses = 0  # Maximum amount of houses used in the game
+maxHotels = 0  # Maximum amount of hotels used in the game
+bankCash = 0  # Current amount of cash in the bank
+bankHouses = 0  # Current amount of available houses
+bankHotels = 0  # Current amount of available hotels
+locationName = {}  # Dictionary of all location objects for the board
 # Dice variables
 dice1 = -1
 dice2 = -1
-double_count = 0        # Count of how many doubles a player has received in a row
-location = 0            # Player Location on the board
-turn = 0                # Turn number this game
+double_count = 0  # Count of how many doubles a player has received in a row
+location = 0  # Player Location on the board
+turn = 0  # Turn number this game
 # All Chance cards
 chance = {
-    1: 'advancetoboardwalk()',              2: 'advancetogo()',
-    3: 'advancetoillinoisavenue()',         4: 'advancetostcharlesplace()',
-    5: 'advancetothenearestrailroad()',     6: 'advancetothenearestrailroad()',
-    7: 'advancetonearestutility()',         8: 'bankpaysyou()',
-    9: 'getoutofjailchance()',              10: 'goback3()',
-    11: 'gotojailchance()',                 12: 'makegeneralrepairs()',
-    13: 'speedingfine()',                   14: 'triptoreadingrailroad()',
-    15: 'electedchariman()',                16: 'buildingloanmatures()'
+    1: 'advancetoboardwalk(curPlayer, )',
+    2: 'advancetogo(curPlayer, )',
+    3: 'advancetoillinoisavenue(curPlayer, )',
+    4: 'advancetostcharlesplace(curPlayer, )',
+    5: 'advancetothenearestrailroad(curPlayer, )',
+    6: 'advancetothenearestrailroad(curPlayer, )',
+    7: 'advancetonearestutility(curPlayer, )',
+    8: 'bankpaysyou(curPlayer, )',
+    9: 'getoutofjailchance(curPlayer, )',
+    10: 'goback3(curPlayer, )',
+    11: 'gotojail(curPlayer, )',
+    12: 'makegeneralrepairs(curPlayer, )',
+    13: 'speedingfine(curPlayer, )',
+    14: 'triptoreadingrailroad(curPlayer, )',
+    15: 'electedchariman(curPlayer, )',
+    16: 'buildingloanmatures(curPlayer, )'
 }
 # All Community Chest Cards
 com_chest = {
-    1: 'advancetogo()',                     2: 'bankerror()',
-    3: 'doctorsfee()',                      4: 'saleofstock()',
-    5: 'getoutofjailcomm()',                6: 'gotojail()',
-    7: 'holidayfund()',                     8: 'incometaxrefund()',
-    9: 'birthday()',                        10: 'lifeinsurancematures()',
-    11: 'payhospitalfees()',                12: 'payschoolfees()',
-    13: 'consultancyfee()',                 14: 'streetrepair()',
-    15: 'beautycontest()',                  16: 'inherit()'
+    1: 'advancetogo(curPlayer, )',
+    2: 'bankerror(curPlayer, "Bank error in your favor. Collect $200")',
+    3: 'doctorsfee(curPlayer, "Doctor\'s fee. Pay $50")',
+    4: 'saleofstock(curPlayer, "From sale of stock you get $50")',
+    5: 'getoutofjailcomm(curPlayer, "Get Out of Jail Free")',
+    6: 'gotojail(curPlayer, )',
+    7: 'holidayfund(curPlayer, "Holiday fund matures. Receive $100")',
+    8: 'incometaxrefund(curPlayer, "Income tax refund. Collect $20")',
+    9: 'birthday(curPlayer, "It is your birthday. Collect $10 from every player.")',
+    10: 'lifeinsurancematures(curPlayer, \)',
+    11: 'payhospitalfees(curPlayer, \)',
+    12: 'payschoolfees(curPlayer, \)',
+    13: 'consultancyfee(curPlayer, \)',
+    14: 'streetrepair(curPlayer, \)',
+    15: 'beautycontest(curPlayer, \)',
+    16: 'inherit(curPlayer, \)'
 }
 
-newGame()               # Reset the game to its basic beginning state
+newGame()  # Reset the game to its basic beginning state
 '''
 while turn < 200:
     # Increase turn count and display
@@ -593,12 +574,6 @@ while turn < 200:
 
     # Figure out new location of player
     location += dice_sum
-    # Check if player goes to jail or returns to Go naturally
-    if double_count == 3 or location == 30:
-        print('WENT TO JAIL \n\n\n')
-        location = 40
-    elif location > 39:
-        location -= 40
 
     # Check if player landed on chance and draw card.
     if location == 7 or location == 22 or location == 36:
@@ -615,6 +590,3 @@ while turn < 200:
     print('Location: ', name[location])
     print('')
 '''
-
-
-
