@@ -23,6 +23,13 @@ class Player:
         elif self.position > 39:
             self.position -= 40
 
+    def setGivenPosition(self, location):
+        self.position = location
+
+    def setGoToJail(self):
+        self.position = 40
+        self.toggleInJail()
+
     def addNewProperty(self, newProperty):
         self.ownedProperties.append(newProperty)
 
@@ -62,8 +69,8 @@ class Player:
     def getInfo(self):
         return [self.name, self.wallet, self.inJail, self.ownedProperties]
 
-def playerPayBankRequest(player, amount):
-    if player.wallet > amount:
-        player.wallet -= amount
-    else:
-        print('You need more money! Do you want to mortgage some of your properties?')
+    def playerPayBankRequest(self, amount):
+        if self.wallet > amount:
+            self.wallet -= amount
+        else:
+            print('You need more money! Do you want to mortgage some of your properties?')
