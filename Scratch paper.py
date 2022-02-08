@@ -256,6 +256,7 @@ class Utility(Property):
         return [self.type, self.name, self.cost, self.rent1, self.rent2, self.mortgageValue, self.unmortgageCost,
                 self.isMortgaged, self.owner, self.level]
 
+
 def buildLocation():
     locationNames = {}
     locationFile = open('C:\\Users\\compu\\Dropbox\\selfStudy\\Monopoly\\Monopoly\\Locations.json')
@@ -309,10 +310,6 @@ def buildLocation():
     return locationNames
 
 
-def playerSetup(playerName):
-    return Player(playerName)
-
-
 def newGame():
     # Resets the basic variables to starting state. Also allows creation of players.
     global bankCash
@@ -337,41 +334,21 @@ def bankPayRequest(amount):
         return remainder  # return how much player will receive
 
 
-# START OF CHANCE CARD ACTIONS
-
-
-# START OF COMMUNITY CHEST CARD ACTIONS
-def community_chest(player, playerArray, action, message, amount1, amount2, newLocation):
-    print(message)
-    io.log_event(player + ", " + message)
-
-    if action is 'advance':
-        advance(player, newLocation)
-    if action is 'collect':
-        collect(player, amount1)
-    elif action is 'pay':
-        player.layerPayBankRequest(player, amount1)
-    elif action is 'gotojail':
-        player.setGoToJail()
-    elif action is 'getoutofjailfree':
-        player.toggleGOoJFComm()
-    elif action is 'repairs':
-        repairs(player, amount1, amount2)
-    elif action is 'birthday':
-        birthday(player, playerArray, amount1)
-
-
-def advance(player, newLocation):
-    player.setGivenPosition(newLocation)
+# START OF CARD ACTIONS
+def advance(player, location, goBack):
+    if goBack is True:
+        player.setGivenPosition(player.position + location)
+    if player.position > location:
+        player.setGivenPosition(location)
+        payamount = bankPayRequest(200)
+        player.setWallet(payamount)
+    else:
+        player.setGivenPosition(location)
 
 
 def collect(player, amount):
     payamount = bankPayRequest(amount)
     player.setWallet(payamount)
-
-
-def pay(player, amount):
-    player.playerPayBankRequest(amount)
 
 
 def repairs(player, houseCost, hotelCost):
@@ -391,8 +368,53 @@ def repairs(player, houseCost, hotelCost):
     player.playerPayBankRequest(player, (numHomes * houseCost + numHotels * hotelCost))
 
 
+def railroad(player):
+    print('')
+
+
+def utility():
+    print('')
+
+
 def birthday(player, playerArray, amount):
     print('This is for birthday collection from all players')
+
+
+def chairman(player, playerArray, amount):
+    print('This is for being elected chairman')
+
+
+curPlayer = Player() # TEST VARIABLE
+
+
+# START OF COMMUNITY CHEST CARD ACTIONS
+def community_chest_cards(player, action, message, amount1=0, amount2=0, playerArray=[], newSpace=-1, goBack=False):
+    print(message)
+    io.log_event(player + ", " + message)
+
+    if action is 'advance':
+        advance(player, newSpace, goBack)
+    if action is 'collect':
+        collect(player, amount1)
+    elif action is 'pay':
+        player.playerPayBankRequest(player, amount1)
+    elif action is 'gotojail':
+        player.setGoToJail()
+    elif action is 'getoutofjailfreecomm':
+        player.toggleGOoJFComm()
+    elif action is 'getoutofjailfreecchance':
+        player.toggleGOoJFChance()
+    elif action is 'railroad':
+        # This is where you calculate the closest forward moving railroad and advance to it, collecting 200 if necessary, and multiply by 2
+    elif action is 'utility':
+        # This is where you calculate the closest forward moving utility and advance to it, collecting 200 if necessary, and multiply by 10
+    elif action is 'repairs':
+        repairs(player, amount1, amount2)
+    elif action is 'birthday':
+        birthday(player, playerArray, amount1)
+    elif action is 'chairman':
+        chairman(player, playerArray, amount1)
+
 
 
 # The start of the main program at this point 2/3/22
@@ -412,49 +434,55 @@ location = 0  # Player Location on the board
 turn = 0  # Turn number this game
 # All Chance cards
 chance = {
-    1: 'advancetoboardwalk(curPlayer, "Advance to Boardwalk")',
-    2: 'advancetogo(curPlayer, "Advance to Go")',
-    3: 'advancetoillinoisavenue(curPlayer, "Advance to Illinois Avenue. If you pass Go, collect $200")',
-    4: 'advancetostcharlesplace(curPlayer, "Advance to St. Charles Place. If you pass Go, collect $200")',
-    5: 'advancetothenearestrailroad(curPlayer, "Advance to the nearest railroad. If unowned, you may buy it from the '
-       'Bank. If owned, pay owner twice the rental to which they are otherwise entitled.")',
-    6: 'advancetothenearestrailroad(curPlayer, "Advance to the nearest railroad. If unowned, you may buy it from the '
-       'Bank. If owned, pay owner twice the rental to which they are otherwise entitled.")',
-    7: 'advancetonearestutility(curPlayer, "Advance token to nearest Utility. If unowned, you may buy it from the Bank.'
-       ' If owned, throw dice and pay owner a total of ten times amount thrown.")',
-    8: 'bankpaysyou(curPlayer, "Bank pays you dividend of $50")',
-    9: 'getoutofjailchance(curPlayer, "Get Out of Jail Free")',
-    10: 'goback3(curPlayer, "Go back 3 spaces.")',
-    11: 'gotojail(curPlayer, "Go to Jail. Go directly to Jail, do not pass Go, do not collect $200")',
-    12: 'makegeneralrepairs(curPlayer, "Make general repairs on all your property. For each house pay $25. For each '
-        'hotel pay $100.")',
-    13: 'speedingfine(curPlayer, "Speeding fine $15")',
-    14: 'triptoreadingrailroad(curPlayer, "Take a trip to Reading Railroad. If you pass Go, collect $200")',
-    15: 'electedchariman(curPlayer, "You have been elected Chairman of the Board. Pay each player $50")',
-    16: 'buildingloanmatures(curPlayer, "Your building loan matures. Collect $150")'
+    1: 'community_chest_cards(curPlayer, "advance", "Advance to Boardwalk", newSpace=39)',
+    2: 'community_chest_cards(curPlayer, "advance", "Advance to Go", newSpace=0)',
+    3: 'community_chest_cards(curPlayer, "advance", "Advance to Illinois Avenue. If you pass Go, collect $200", '
+       'newSpace=24)',
+    4: 'community_chest_cards(curPlayer, "advance", "Advance to St. Charles Place. If you pass Go, collect $200", '
+       'newSpace=11)',
+    5: 'community_chest_cards(curPlayer, "railroad", "Advance to the nearest railroad. If unowned, you may buy it from '
+       'the Bank. If owned, pay owner twice the rental to which they are otherwise entitled.")',
+    6: 'community_chest_cards(curPlayer, "railroad", "Advance to the nearest railroad. If unowned, you may buy it from '
+       'the Bank. If owned, pay owner twice the rental to which they are otherwise entitled.")',
+    7: 'community_chest_cards(curPlayer, "utility", "Advance token to nearest Utility. If unowned, you may buy it from '
+       'the Bank. If owned, throw dice and pay owner a total of ten times amount thrown.")',
+    8: 'community_chest_cards(curPlayer, "collect", "Bank pays you dividend of $50", amount1=50)',
+    9: 'community_chest_cards(curPlayer, "getoutofjailfreecchance", "Get Out of Jail Free")',
+    10: 'community_chest_cards(curPlayer, "advance", "Go back 3 spaces.", newSpace=(curPlayer.getPosition() - 3), '
+        'goBack=True)',
+    11: 'community_chest_cards(curPlayer, "gotojail", "Go to Jail. Go directly to Jail, do not pass Go, do not collect '
+        '$200")',
+    12: 'community_chest_cards(curPlayer, "repairs", "Make general repairs on all your property. For each house pay '
+        '$25. For each hotel pay $100.", amount1=25, amount2=100)',
+    13: 'community_chest_cards(curPlayer, "pay", "Speeding fine. Pay $15", amount1=15)',
+    14: 'community_chest_cards(curPlayer, "advance", "Take a trip to Reading Railroad. If you pass Go, collect $200", '
+        'newSpace=5)',
+    15: 'community_chest_cards(curPlayer, "chairman", "You have been elected Chairman of the Board. Pay each player '
+        '$50", amount1=50)',
+    16: 'community_chest_cards(curPlayer, "collect", "Your building loan matures. Collect $150", amount1=150)'
 }
 # All Community Chest Cards
 com_chest = {
-    1: 'community_chest(curPlayer, [], "advance", "Advance to Go", 0, 0, 0)',
-    2: 'community_chest(curPlayer, [], "collect", "Bank error in your favor. Collect $200", 200, 0, -1)',
-    3: 'community_chest(curPlayer, [], "pay", "Doctor\'s fee. Pay $50", 50, 0, -1)',
-    4: 'community_chest(curPlayer, [], "collect", "From sale of stock you get $50", 50, 0, -1)',
-    5: 'community_chest(curPlayer, [], "gotojail", "Go to Jail. Go directly to Jail, do not pass Go, do not collect '
-       '$200", 0, 0, 40)',
-    6: 'community_chest(curPlayer, [], "getoutofjailfree", "Get Out of Jail Free", 0, 0, -1)',
-    7: 'community_chest(curPlayer, [], "collect", "Holiday fund matures. Receive $100", 100, 0, -1)',
-    8: 'community_chest(curPlayer, [], "collect", "Income tax refund. Collect $20", 20, 0, -1)',
-    9: 'community_chest(curPlayer, playerList, "birtday", "It is your birthday. Collect $10 from every player.", 10, '
-       '0, -1)',
-    10: 'community_chest(curPlayer, [], "collect", "Life insurance matures. Collect $100.", 100, 0, -1)',
-    11: 'community_chest(curPlayer, [], "pay", "Pay hospital fees of $100", 100, 0, -1)',
-    12: 'community_chest(curPlayer, [], "pay", "Pay school fees of $50", 50, 0, -1)',
-    13: 'community_chest(curPlayer, [], "collect", "Receive $25 consultancy fee.", 25, 0, -1)',
-    14: 'community_chest(curPlayer, [], "repairs", "You are assessed for street repair. $40 per house. $115 per hotel."'
-        ', 40, 115, -1)',
-    15: 'community_chest(curPlayer, [], "collect", "You have won second prize in a beauty contest. Collect $10", 10, '
-        '0, -1)',
-    16: 'community_chest(curPlayer, [], "collect", "You inherit $100.", 100, 0, -1)'
+    1: 'community_chest_cards(curPlayer, "advance", "Advance to Go")',
+    2: 'community_chest_cards(curPlayer, "collect", "Bank error in your favor. Collect $200", amount1=200)',
+    3: 'community_chest_cards(curPlayer, "pay", "Doctor\'s fee. Pay $50", amount1=50)',
+    4: 'community_chest_cards(curPlayer, "collect", "From sale of stock you get $50", amount1=50)',
+    5: 'community_chest_cards(curPlayer, "gotojail", "Go to Jail. Go directly to Jail, do not pass Go, do not '
+       'collect $200", newSpace=40)',
+    6: 'community_chest_cards(curPlayer, "getoutofjailfreecomm", "Get Out of Jail Free")',
+    7: 'community_chest_cards(curPlayer, "collect", "Holiday fund matures. Receive $100", amount1=100)',
+    8: 'community_chest_cards(curPlayer, "collect", "Income tax refund. Collect $20", amount1=20)',
+    9: 'community_chest_cards(curPlayer, "birtday", "It is your birthday. Collect $10 from every player.",'
+       ' amount1=10, playerArray=playerList)',
+    10: 'community_chest_cards(curPlayer, "collect", "Life insurance matures. Collect $100.", amount1=100)',
+    11: 'community_chest_cards(curPlayer, "pay", "Pay hospital fees of $100", amount1=100)',
+    12: 'community_chest_cards(curPlayer, "pay", "Pay school fees of $50", amount1=50)',
+    13: 'community_chest_cards(curPlayer, "collect", "Receive $25 consultancy fee.", amount1=25)',
+    14: 'community_chest_cards(curPlayer, "repairs", "You are assessed for street repair. $40 per house. $115 per '
+        'hotel.", amount1=40, amount2=115)',
+    15: 'community_chest_cards(curPlayer, "collect", "You have won second prize in a beauty contest. Collect $10", '
+        'amount1=10)',
+    16: 'community_chest_cards(curPlayer, "collect", "You inherit $100.", amount1=100)'
 }
 
 newGame()  # Reset the game to its basic beginning state
