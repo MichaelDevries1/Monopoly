@@ -406,9 +406,11 @@ def community_chest_cards(player, action, message, amount1=0, amount2=0, playerA
     elif action is 'getoutofjailfreecchance':
         player.toggleGOoJFChance()
     elif action is 'railroad':
-        # TODO: This is where you calculate the closest forward moving railroad and advance to it, collecting 200 if necessary, and multiply by 2
+        railroad(player)  # TODO: This is where you calculate the closest forward moving railroad and advance to it,
+        # collecting 200 if necessary, and multiply by 2
     elif action is 'utility':
-        # TODO: This is where you calculate the closest forward moving utility and advance to it, collecting 200 if necessary, and multiply by 10
+        utility(player)  # TODO: This is where you calculate the closest forward moving utility and advance to it,
+        # collecting 200 if necessary, and multiply by 10
     elif action is 'repairs':
         repairs(player, amount1, amount2)
     elif action is 'birthday':
