@@ -369,25 +369,26 @@ def repairs(player, houseCost, hotelCost):
 
 
 def railroad(player):
-    print('')
+    print('')  # todo: add railroad chance card functionality
 
 
 def utility():
-    print('')
+    print('')  # todo: add utility chance card functionality
 
 
 def birthday(player, playerArray, amount):
-    print('This is for birthday collection from all players')
+    print('This is for birthday collection from all players')  # todo: add birthday com chest card functionality
 
 
 def chairman(player, playerArray, amount):
-    print('This is for being elected chairman')
+    print('This is for being elected chairman')  # todo: add chairman chance card functionality
 
 
-curPlayer = Player() # TEST VARIABLE
+curPlayer = Player() # TODO: TEST VARIABLE
 
 
 # START OF COMMUNITY CHEST CARD ACTIONS
+# TODO: change name of this function as it works with both decks
 def community_chest_cards(player, action, message, amount1=0, amount2=0, playerArray=[], newSpace=-1, goBack=False):
     print(message)
     io.log_event(player + ", " + message)
@@ -405,9 +406,9 @@ def community_chest_cards(player, action, message, amount1=0, amount2=0, playerA
     elif action is 'getoutofjailfreecchance':
         player.toggleGOoJFChance()
     elif action is 'railroad':
-        # This is where you calculate the closest forward moving railroad and advance to it, collecting 200 if necessary, and multiply by 2
+        # TODO: This is where you calculate the closest forward moving railroad and advance to it, collecting 200 if necessary, and multiply by 2
     elif action is 'utility':
-        # This is where you calculate the closest forward moving utility and advance to it, collecting 200 if necessary, and multiply by 10
+        # TODO: This is where you calculate the closest forward moving utility and advance to it, collecting 200 if necessary, and multiply by 10
     elif action is 'repairs':
         repairs(player, amount1, amount2)
     elif action is 'birthday':
