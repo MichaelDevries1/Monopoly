@@ -69,7 +69,7 @@ class Player:
     def getInfo(self):
         return [self.name, self.wallet, self.inJail, self.ownedProperties]
 
-    def playerPayBankRequest(self, amount):
+    def playerPayRequest(self, amount):
         if self.wallet > amount:
             self.wallet -= amount
         else:

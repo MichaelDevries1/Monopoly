@@ -3,9 +3,9 @@ class SimpleLocation:
     type = ''
     name = ''
 
-    def __init__(self, pType, pName):
-        self.type = pType
-        self.name = pName
+    def __init__(self, p_type, p_name):
+        self.type = p_type
+        self.name = p_name
 
     def getType(self):
         return self.type

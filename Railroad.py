@@ -11,15 +11,17 @@ class Railroad(Property):
 
     def __init__(self, pType, pName, pCost):
         super().__init__(pType, pName, pCost)
+        self.owner = ''
+        self.isMortgaged = False
 
     def toggleIsMortgaged(self):
         self.isMortgaged = not self.isMortgaged
 
-    def setOwner(self, newOwner):
-        self.owner = newOwner
+    def setOwner(self, new_owner):
+        self.owner = new_owner
 
-    def setLevel(self, newLevel):
-        self.level = newLevel
+    def setLevel(self, new_level):
+        self.level = new_level
 
     def getName(self):
         return self.name

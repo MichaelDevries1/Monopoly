@@ -5,8 +5,8 @@ class Go(SimpleLocation):
     # The Go location object. Requires the SimpleLocation object. Used to retrieve information for "Go"
     payment = 200
 
-    def __init__(self, propType, cardName):
-        super().__init__(propType, cardName)
+    def __init__(self, prop_type, card_name):
+        super().__init__(prop_type, card_name)
 
     def getPayment(self):
         return self.payment

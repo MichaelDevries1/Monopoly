@@ -12,15 +12,17 @@ class Utility(Property):
         super().__init__(pType, pName, pCost)
         self.mortgageValue = self.cost / 2
         self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
+        self.owner = ''
+        self.isMortgaged = False
 
     def toggleIsMortgaged(self):
         self.isMortgaged = not self.isMortgaged
 
-    def setOwner(self, newOwner):
-        self.owner = newOwner
+    def setOwner(self, new_owner):
+        self.owner = new_owner
 
-    def setLevel(self, newLevel):
-        self.level = newLevel
+    def setLevel(self, new_level):
+        self.level = new_level
 
     def getType(self):
         return self.type
