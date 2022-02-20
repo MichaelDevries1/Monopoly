@@ -1,4 +1,4 @@
-from Monopoly import Property
+from Monopoly.game import Property
 
 
 class Railroad(Property):

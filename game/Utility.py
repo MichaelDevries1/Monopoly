@@ -1,5 +1,5 @@
 import math
-from Monopoly import Property
+from Monopoly.game import Property
 
 
 class Utility(Property):
