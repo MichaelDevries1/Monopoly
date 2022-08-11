@@ -1,4 +1,4 @@
-from Monopoly import SimpleLocation
+from game import SimpleLocation
 
 
 class Tax(SimpleLocation):

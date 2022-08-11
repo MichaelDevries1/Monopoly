@@ -1,5 +1,6 @@
 import math
-from Monopoly import SimpleLocation
+
+from game import SimpleLocation
 
 
 class Property(SimpleLocation):
@@ -30,8 +31,11 @@ class Property(SimpleLocation):
     def getMortgageValue(self):
         return self.mortgageValue
 
-    def getUnmortgageCost(self):
-        return self.unmortgageCost
+    def getCost(self):
+        return self.cost
 
     def getIsMortgaged(self):
         return self.isMortgaged
+
+    def getUnmortgageCost(self):
+        return self.unmortgageCost

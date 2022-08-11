@@ -74,3 +74,6 @@ class Player:
             self.wallet -= amount
         else:
             print('You need more money! Do you want to mortgage some of your properties?')
+
+    def canPurchase(self, price):
+        return self.wallet > price

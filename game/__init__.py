@@ -1,13 +1,13 @@
 import random
 import json
 import io
-from Monopoly.game.SimpleLocation import SimpleLocation
-from Monopoly.game.Go import Go
-from Monopoly.game.Buildable import Buildable
-from Monopoly.game.Railroad import Railroad
-from Monopoly.game.Tax import Tax
-from Monopoly.game.Utility import Utility
-from Monopoly.game.player import Player
+from game.SimpleLocation import SimpleLocation
+from game.Go import Go
+from game.Buildable import Buildable
+from game.Railroad import Railroad
+from game.Tax import Tax
+from game.Utility import Utility
+from game.player import Player
 
 
 class Monopoly:
@@ -81,7 +81,7 @@ class Monopoly:
     @staticmethod
     def buildLocation():
         location_names = {}
-        location_file = open('C:\\Users\\compu\\Dropbox\\selfStudy\\Monopoly\\Monopoly\\Locations.json')
+        location_file = open('game/Locations.json')
         data = json.load(location_file)
         x = 0
 
@@ -204,6 +204,24 @@ class Monopoly:
         # check to see if player can pay amount
         cur_player.playerPayRequest(cur_player, (num_homes * house_cost + num_hotels * hotel_cost))
 
+    def modifiedRentUtilRail(self, cur_player, player_list, modifier):
+        if self.locationName[cur_player.position].owner is not cur_player.getName and \
+                self.locationName[cur_player.position].owner is not "":  # check ownership of property
+            rent_level = self.locationName[cur_player.position].getLevel()
+            rent_amount = self.locationName[cur_player.position].getRents()[rent_level - 1] * modifier
+            cur_player.playerPayRequest(rent_amount)
+            for receiving_player in player_list:
+                if self.locationName[cur_player.position].owner is receiving_player.getName:
+                    receiving_player.setWallet(rent_amount)
+        else:
+            # todo: find out if the player has enough money for the property.
+            if cur_player.canPurchace(self.locationName[cur_player.position].getCost):
+                # todo: make pop up asking if player wishes to purchase the property
+                pass
+            else:
+                # todo: if the player doesn't have enough money or doesn't want the property, send it to auction
+                pass
+
     def railroad(self, cur_player, player_list):
         if cur_player.position == 7:  # chance location between the blue set
             cur_player.setGivenPosition(15)  # set new location to Pennsylvania Railroad
@@ -212,15 +230,9 @@ class Monopoly:
         elif cur_player.position == 36:  # chance location before park place
             cur_player.setGivenPosition(5)  # set new location to Reading Railroad, passing go
             self.collectFromBank(cur_player, 200)  # collect 200 for passing go
+        # todo: Make a section for purchasing the property if it isn't owned.
         # todo: check if next block of code can be pulled into another function
-        if self.locationName[cur_player.position].owner is not cur_player.getName and \
-                self.locationName[cur_player.position].owner is not "":
-            rent_level = self.locationName[cur_player.position].getLevel()
-            rent_amount = self.locationName[cur_player.position].getRents()[rent_level - 1] * 2
-            cur_player.playerPayRequest(rent_amount)
-            for receiving_player in player_list:
-                if self.locationName[cur_player.position].owner is receiving_player.getName:
-                    receiving_player.setWallet(rent_amount)
+        self.modifiedRentUtilRail(cur_player, player_list, 2)
 
     def utility(self, cur_player, player_list):
         if cur_player.position == 7:  # chance location between the blue set
@@ -230,20 +242,13 @@ class Monopoly:
         elif cur_player.position == 36:  # chance location before park place
             cur_player.setGivenPosition(12)  # set new location to Electric Company
             self.collectFromBank(cur_player, 200)  # collect 200 for passing go
+        # todo: Make a section for purchasing the property if it isn't owned.
         # todo: check if next block of code can be pulled into another function
-        if self.locationName[cur_player.position].owner is not cur_player.getName and self.locationName[cur_player.position].owner \
-                is not "":
-            rent_level = self.locationName[cur_player.position].getLevel()
-            rent_amount = self.locationName[cur_player.position].getRents()[rent_level - 1] * 10
-            cur_player.playerPayRequest(rent_amount)
-            for receiving_player in player_list:
-                if self.locationName[cur_player.position].owner is receiving_player.getName:
-                    receiving_player.setWallet(rent_amount)
+        self.modifiedRentUtilRail(cur_player, player_list, 10)
 
     def birthday(self, cur_player, playerArray, amount):
         print('This is for birthday collection from all players')  # todo: add birthday com chest card functionality
         num_players = len(playerArray) - 1
-
 
     def chairman(self, cur_player, playerArray, amount):
         print('This is for being elected chairman')  # todo: add chairman chance card functionality
