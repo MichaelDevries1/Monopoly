@@ -1,6 +1,6 @@
 import random
 import json
-import io
+from game.io import Logging
 from game.SimpleLocation import SimpleLocation
 from game.Go import Go
 from game.Buildable import Buildable
@@ -76,10 +76,9 @@ class Monopoly:
         16: 'draw_cards(curPlayer, "collect", "You inherit $100.", amount1=100)'
     }
 
-    # todo: add color sets to the Locations.json file.
     # todo: create new list of all color sets.
     @staticmethod
-    def buildLocation():
+    def buildTheBoard():
         location_names = {}
         location_file = open('game/Locations.json')
         data = json.load(location_file)
@@ -97,6 +96,7 @@ class Monopoly:
                     pType='buildable',
                     pName=data['locations'][x]['name'],
                     pCost=data['locations'][x]['cost'],
+                    pColor=data['locations'][x]['color'],
                     pRent=data['locations'][x]['rent0'],
                     pRent1=data['locations'][x]['rent1'],
                     pRent4=data['locations'][x]['rent4'],
@@ -130,7 +130,7 @@ class Monopoly:
             x += 1
         location_file.close()
         return location_names
-    
+
     @staticmethod
     def newPlayer():
         new_name = input('What is your name?')
@@ -153,7 +153,7 @@ class Monopoly:
         bankCash = 28580  # Bank will always start with $28580 in cash.
         bankHouses = 32  # Bank will always start with 32 available houses.
         bankHotels = 12  # Bank will always start with 12 available hotels.
-        LocationName = self.buildLocation()  # The dictionary of all location objects
+        LocationName = self.buildTheBoard()  # The dictionary of all location objects
 
     @staticmethod
     def turnDiceRoll(rolls):
@@ -288,19 +288,13 @@ class Monopoly:
             self.chairman(cur_player, player_array, amount1)
 
 
-# The start of the main program at this point 2/3/22
-    newGame()  # Reset the game to its basic beginning state
+    # The start of the main program at this point 2/3/22
+    # newGame()  # Reset the game to its basic beginning state
     '''
     while turn < 200:
         # Increase turn count and display
         turn += 1
         print("Turn #: ", turn)
-    
-        # Roll the 2 dice, add them together and display the results
-        dice1 = random.randint(1, 6)
-        dice2 = random.randint(1, 6)
-        dice_sum = dice1 + dice2
-        print("Dice 1: ", dice1, " Dice 2: ", dice2, " Dice sum: ", dice_sum)
     
         # Monitor number of doubles rolled in a row
         if dice1 == dice2:

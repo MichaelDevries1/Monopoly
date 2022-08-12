@@ -1,13 +1,11 @@
-import math
-
 from game import Property
 
 
 class Buildable(Property):
     # Third level of objects for properties that can have houses and hotels built upon them.
     color = ''  # The color group of the property.
-    colorRent = 0  # The amount of rent collected once all of that color is collected
     rent0 = 0  # The amount of rent collected with 0 houses
+    colorRent = 0  # The amount of rent collected once all of that color is collected
     rent1 = 0  # The amount of rent collected with 1 house
     rent2 = 0  # The amount of rent collected with 2 houses
     rent3 = 0  # The amount of rent collected with 3 houses
@@ -28,8 +26,6 @@ class Buildable(Property):
         self.rent4 = pRent4
         self.rentHotel = pRentHotel
         self.buildingCost = pBuildingCost
-        self.mortgageValue = self.cost / 2
-        self.unmortgageCost = int(math.ceil(self.mortgageValue * 1.1))
 
     def setLevel(self, level):
         self.level = level

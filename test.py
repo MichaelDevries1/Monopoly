@@ -1,12 +1,16 @@
 import unittest
 
-from Monopoly.game import Monopoly as mon
+from game.__init__ import Monopoly as mon
 
 
 class TestMonopoly(unittest.TestCase):
     def test_newPlayerList(self):
-        Basis = ['Michael', 'Kayla', 'Nathan', 'Summer']
+        basis = ['Michael', 'Kayla', 'Nathan', 'Summer']
         testing_list = []
-        testing_list = mon.newPlayerList(testing_list)
-        result = [testing_list[0].]
-        self.assertEqual()
+        for i in range(1, 4):
+            testing_list[i-1] = mon.newPlayer()
+        self.assertEqual(basis, testing_list)
+
+
+if __name__ == '__main__':
+    TestMonopoly().test_newPlayerList()
