@@ -3,7 +3,7 @@ import math
 from game import Property
 
 
-class Utility(Property):
+class Utility(Property.Property):
     # Third level of objects for utility properties.
     rent1 = 4  # dice roll multiple received when a player lands on 1 owned utility
     rent2 = 10  # dice roll multiple received when a player lands on 2 owned utilities

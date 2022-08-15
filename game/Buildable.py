@@ -1,7 +1,7 @@
 from game import Property
 
 
-class Buildable(Property):
+class Buildable(Property.Property):
     # Third level of objects for properties that can have houses and hotels built upon them.
     color = ''  # The color group of the property.
     rent0 = 0  # The amount of rent collected with 0 houses
@@ -16,7 +16,7 @@ class Buildable(Property):
     #                     ...5=4 houses, 6=hotel.
 
     def __init__(self, pType, pName, pCost, pColor, pRent, pRent1, pRent4, pRentHotel, pBuildingCost):
-        super().__init__(pType, pName, pCost)
+        super(pType, pName, pCost).__init__(pType, pName, pCost)
         self.color = pColor
         self.rent0 = pRent
         self.colorRent = self.rent0 * 2

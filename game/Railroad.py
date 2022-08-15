@@ -1,7 +1,7 @@
 from game import Property
 
 
-class Railroad(Property):
+class Railroad(Property.Property):
     # Third level of objects for railroad properties.
     rent1 = 25  # rent received when a player lands on 1 owned railroad
     rent2 = 50  # rent received when a player lands on 2 owned railroads

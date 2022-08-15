@@ -12,6 +12,8 @@ from game.player import Player
 
 class Monopoly:
     # Setting initial global variables
+    jsonFile = 'game/Locations.json'
+    data = ''
     maxBankCash = 28580  # Maximum amount of cash used in the game
     maxHouses = 0  # Maximum amount of houses used in the game
     maxHotels = 0  # Maximum amount of hotels used in the game
@@ -76,12 +78,24 @@ class Monopoly:
         16: 'draw_cards(curPlayer, "collect", "You inherit $100.", amount1=100)'
     }
 
-    # todo: create new list of all color sets.
     @staticmethod
-    def buildTheBoard():
-        location_names = {}
-        location_file = open('game/Locations.json')
+    def readJSON(jsonfile):
+        if jsonfile is not '':
+            location_file = open(jsonfile)
+        else:
+            location_file = open('game/Locations.json')
         data = json.load(location_file)
+        return data
+
+    @staticmethod
+    def newPlayer():
+        new_name = input('What is your name?')
+        return Player(new_name)
+
+    # todo: create new list of all color sets.
+    def buildTheBoard(self, fileName):
+        location_names = {}
+        data = self.readJSON(fileName)
         x = 0
 
         for i in data['locations']:
@@ -128,13 +142,8 @@ class Monopoly:
                 )
             # print(str(x), ': ', location_names.get(x).getName())
             x += 1
-        location_file.close()
+        data.close()
         return location_names
-
-    @staticmethod
-    def newPlayer():
-        new_name = input('What is your name?')
-        return Player(new_name)
     
     def newPlayerList(self, player_list):
         num_players = int(input('How many players are playing?'))
@@ -150,10 +159,11 @@ class Monopoly:
         global bankHouses
         global bankHotels
         global LocationName
+        global jasonFile
         bankCash = 28580  # Bank will always start with $28580 in cash.
         bankHouses = 32  # Bank will always start with 32 available houses.
         bankHotels = 12  # Bank will always start with 12 available hotels.
-        LocationName = self.buildTheBoard()  # The dictionary of all location objects
+        LocationName = self.buildTheBoard(jasonFile)  # The dictionary of all location objects
 
     @staticmethod
     def turnDiceRoll(rolls):
@@ -252,9 +262,6 @@ class Monopoly:
 
     def chairman(self, cur_player, playerArray, amount):
         print('This is for being elected chairman')  # todo: add chairman chance card functionality
-
-    curPlayer = Player()  # TODO: TEST VARIABLE
-    playerList = []
 
     # START OF COMMUNITY CHEST CARD ACTIONS
     # TODO: change name of this function as it works with both decks
