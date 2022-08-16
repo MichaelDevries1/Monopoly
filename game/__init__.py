@@ -13,7 +13,6 @@ from game.player import Player
 class Monopoly:
     # Setting initial global variables
     jsonFile = 'game/Locations.json'
-    data = ''
     maxBankCash = 28580  # Maximum amount of cash used in the game
     maxHouses = 0  # Maximum amount of houses used in the game
     maxHotels = 0  # Maximum amount of hotels used in the game
@@ -79,23 +78,38 @@ class Monopoly:
     }
 
     @staticmethod
-    def readJSON(jsonfile):
-        if jsonfile is not '':
-            location_file = open(jsonfile)
+    def read_json(json_file):
+        if json_file is not '':
+            location_file = open(json_file)
         else:
             location_file = open('game/Locations.json')
         data = json.load(location_file)
         return data
 
     @staticmethod
-    def newPlayer():
+    def input_request(question):
+        response = input(question)
+        return response
+
+    def how_many_players(self):
+        num_players = int(self.input_request('How many players are playing?'))
+        if num_players < 1 or num_players > 4:
+            self.invalid_num_players()
+        self.new_player_list(num_players)
+
+    def invalid_num_players(self):
+        print('Invalid number of players! Please choose a number between 1 and 4 players.')
+        self.how_many_players()
+
+    @staticmethod
+    def new_player():
         new_name = input('What is your name?')
         return Player(new_name)
 
     # todo: create new list of all color sets.
-    def buildTheBoard(self, fileName):
+    def build_the_board(self, file_name):
         location_names = {}
-        data = self.readJSON(fileName)
+        data = self.read_json(file_name)
         x = 0
 
         for i in data['locations']:
@@ -145,13 +159,14 @@ class Monopoly:
         data.close()
         return location_names
     
-    def newPlayerList(self, player_list):
-        num_players = int(input('How many players are playing?'))
+    def new_player_list(self, num_players):
+        global playerList
+        playerList = []
         while num_players < 1 or num_players > 4:
-            num_players = int(input('Invalid number of players! Please choose a number between 1 and 4 players.'))
+            self.invalid_num_players()
         for i in range(num_players):
-            player_list[i - 1] = self.newPlayer()
-        return player_list
+            playerList[i - 1] = self.new_player()
+        return playerList
 
     def newGame(self):
         # Resets the basic variables to starting state. Also allows creation of players.
@@ -163,7 +178,7 @@ class Monopoly:
         bankCash = 28580  # Bank will always start with $28580 in cash.
         bankHouses = 32  # Bank will always start with 32 available houses.
         bankHotels = 12  # Bank will always start with 12 available hotels.
-        LocationName = self.buildTheBoard(jasonFile)  # The dictionary of all location objects
+        LocationName = self.build_the_board(jasonFile)  # The dictionary of all location objects
 
     @staticmethod
     def turnDiceRoll(rolls):

@@ -14,11 +14,11 @@ class TestMonopoly(unittest.TestCase):
         basis = [m.getName(), k.getName(), n.getName(), s.getName()]
         testing_list = []
         for i in range(0, 4):
-            newPlayer = mon.newPlayer()
+            newPlayer = mon.new_player()
             testing_list.append(newPlayer.getName())
         self.assertEqual(basis, testing_list)
 
-    def test_go(self):
-        testGo = Go.__init__()
+
+
 
 unittest.main()
